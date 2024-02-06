@@ -32,7 +32,7 @@ jobs:
       - name: Install Liquibase
         run: |
           curl -L https://github.com/liquibase/liquibase/releases/download/v${LB_VERSION}/liquibase-${LB_VERSION}.zip --output liquibase.zip
-          unzip -o -d . liquibase.zip
+          unzip -o -d liquibase liquibase.zip
         env:
           LB_VERSION: 4.25.1
 
@@ -40,5 +40,5 @@ jobs:
         run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} liquibase.properties
 
       - name: Migrate Database to RDS
-        run: liquibase update
+        run: ./liquibase/liquibase update
         
