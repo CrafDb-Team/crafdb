@@ -2,7 +2,7 @@ name: Development Database CI/CD
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ main, dev, CRAF-5-setup-git-hub-actions ]
 
 permissions:
   contents: read
