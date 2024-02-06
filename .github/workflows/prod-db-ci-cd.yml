@@ -14,6 +14,7 @@ jobs:
 
   migrate_db:
     name: Migrate DB
+    # needs: ci-workflow
     runs-on: ubuntu-latest
     environment: Production
 

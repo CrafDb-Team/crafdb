@@ -14,6 +14,7 @@ jobs:
 
   migrate_db:
     name: Migrate DB
+    # needs: ci-workflow
     runs-on: ubuntu-latest
     environment: Development
 
@@ -41,3 +42,4 @@ jobs:
 
       - name: Migrate Database to RDS
         run: liquibase update
+        
