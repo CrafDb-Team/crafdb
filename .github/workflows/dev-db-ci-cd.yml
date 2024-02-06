@@ -13,7 +13,7 @@ jobs:
   #   secrets: inherit
 
   migrate_db:
-    name: Migrate DB
+    name: Migrate Dev DB
     # needs: ci-workflow
     runs-on: ubuntu-latest
     environment: Development
@@ -29,17 +29,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Import Liquibase GPG Key
-        run: wget -O- https://repo.liquibase.com/liquibase.asc | gpg --dearmor > liquibase-keyring.gpg && \
-             cat liquibase-keyring.gpg | sudo tee /usr/share/keyrings/liquibase-keyring.gpg > /dev/null && \
-             echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/liquibase-keyring.gpg] https://repo.liquibase.com stable main' | sudo tee /etc/apt/sources.list.d/liquibase.list
-
-      - name: Install Liquibase
-        run: sudo apt-get install liquibase
-
       - name: Retrieve Liquibase Config
         run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} liquibase.properties
 
       - name: Migrate Database to RDS
-        run: liquibase update
+        uses: liquibase-github-actions/update@v4.25.1
         
