@@ -1,5 +1,8 @@
 # Craft Brewery ERD
 
+[![hackmd-github-sync-badge](https://hackmd.io/Q94ZbKATT1-LXX19sRTHTA/badge)](https://hackmd.io/Q94ZbKATT1-LXX19sRTHTA)
+
+
 [TOC]
 
 ## Diagram
