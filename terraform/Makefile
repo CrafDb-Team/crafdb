@@ -2,6 +2,9 @@
 ENV_VARS_DIR := env-vars
 ENV := local
 
+.PHONY tf_setup:
+# use the tf_init, tf_format, tf_validate, tf_plan
+tf_setup: tf_init tf_format tf_validate tf_plan
 
 .PHONY tf_init:
 tf_init:
@@ -24,5 +27,8 @@ tf_apply:
 	terraform apply -var-file=$(ENV_VARS_DIR)/$(ENV).tfvars
 
 ## Speculative destroy (Wont destroy anything, just show what will be destroyed)
-.PHONY tf_destroy:
+.PHONY tf_spec_destroy:
 	terraform plan -destroy -var-file=$(ENV_VARS_DIR)/$(ENV).tfvars
+
+.PHONY tf_destroy:
+	terraform destroy -var-file=$(ENV_VARS_DIR)/$(ENV).tfvars
