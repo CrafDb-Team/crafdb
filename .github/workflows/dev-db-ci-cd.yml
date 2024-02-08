@@ -9,13 +9,13 @@ permissions:
   id-token: write
 
 jobs:
-  # ci-workflow:
-  #   uses: ./.github/workflows/dev-db-ci.yml
-  #   secrets: inherit
+  ci-workflow:
+    uses: ./.github/workflows/dev-db-ci.yml
+    secrets: inherit
 
   migrate_db:
     name: Migrate Dev DB
-    # needs: ci-workflow
+    needs: ci-workflow
     runs-on: ubuntu-latest
     environment: Development
 

@@ -1,0 +1,111 @@
+name: Database Development CI
+
+on:
+  pull_request:
+    branches: [ dev ]
+  workflow_call:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test_empty_db:
+    name: Test Empty DB Migration
+    runs-on: ubuntu-latest
+    environment: Testing
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install psql
+        run: |
+          sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get -y install postgresql
+      
+      - name: Install Liquibase
+        run: |
+          curl -L https://github.com/liquibase/liquibase/releases/download/v${LB_VERSION}/liquibase-${LB_VERSION}.zip --output liquibase.zip
+          unzip -o -d liquibase liquibase.zip
+        env:
+          LB_VERSION: ${{ vars.LIQUIBASE_VERSION }}
+
+      - name: Create Test Database
+        run: psql postgresql://${{ secrets.DB_USERNAME }}@${{ secrets.DB_URL }} -c "CREATE DATABASE dev_temp"
+        env:
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Retrieve Env File
+        run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
+
+      - name: Create Liquibase Properties
+        run: |
+          export $(cat .env | xargs)
+          echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
+          echo "url: jdbc:postgresql://${DB_URL}/dev_temp" >> liquibase.properties
+          echo "username:" $DB_USERNAME >> liquibase.properties
+          echo "password:" $DB_PASSWORD >> liquibase.properties
+
+      - name: Test Migration
+        run: liquibase update-testing-rollback
+
+      - name: Destuct Test Database
+        run: psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE dev_temp"
+
+  test_prod_db:
+    name: Test Prod Spin Up DB Migration
+    runs-on: ubuntu-latest
+    needs: test_empty_db
+    environment: Testing
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install psql
+        run: |
+          sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get -y install postgresql
+
+      - name: Create Test Database
+        run: psql postgresql://${{ env.DB_USERNAME }}@${{ secrets.DB_URL }} -c "CREATE DATABASE dev_temp TEMPLATE dev"
+        env:
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Install Liquibase
+        run: |
+          curl -L https://github.com/liquibase/liquibase/releases/download/v${LB_VERSION}/liquibase-${LB_VERSION}.zip --output liquibase.zip
+          unzip -o -d liquibase liquibase.zip
+        env:
+          LB_VERSION: ${{ vars.LIQUIBASE_VERSION }}
+
+      - name: Create Liquibase Properties
+        run: |
+          export $(cat .env | xargs)
+          echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
+          echo "url: jdbc:postgresql://${DB_URL}/dev_temp" >> liquibase.properties
+          echo "username:" $DB_USERNAME >> liquibase.properties
+          echo "password:" $DB_PASSWORD >> liquibase.properties
+
+      - name: Test Migration
+        run: liquibase update-testing-rollback
+
+      - name: Destuct Test Database
+        run: psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE dev_temp"
