@@ -46,7 +46,7 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP TABLE IF EXISTS dev_temp; CREATE DATABASE dev_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS dev_temp; CREATE DATABASE dev_temp"
 
       - name: Create Liquibase Properties
         run: |
@@ -99,7 +99,7 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP TABLE IF EXISTS dev_temp; CREATE DATABASE dev_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS dev_temp; CREATE DATABASE dev_temp"
 
       - name: Create Liquibase Properties
         run: |
