@@ -42,11 +42,13 @@ jobs:
       - name: Retrieve Env File
         run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
 
-      - name: Export Env Variables
-        run: export $(cat .env | xargs)
+      # - name: Export Env Variables
+      #   run: export $(cat .env | xargs)
 
       - name: Create Test Database
-        run: psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE dev_temp"
+        run: |
+          export $(cat .env | xargs)
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE dev_temp"
         env:
           PGPASSWORD: $DB_PASSWORD
 
@@ -110,4 +112,4 @@ jobs:
         run: liquibase update-testing-rollback
 
       - name: Destuct Test Database
-        run: psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE dev_temp"
+        run: psql -d "postgresql://$DB_USERNAME@$DB_URL/posgres" -c "DROP DATABASE dev_temp"
