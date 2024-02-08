@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   # ci-workflow:
-  #   uses: ./.github/workflows/db-ci.yml
+  #   uses: ./.github/workflows/dev-db-ci.yml
   #   secrets: inherit
 
   migrate_db:
@@ -35,8 +35,7 @@ jobs:
         env:
           LB_VERSION: ${{ vars.LIQUIBASE_VERSION }}
 
-      - name: Retrieve Liquibase Config
-        run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} liquibase.properties
+      # CREATE LIQUIBASE PROPERTIES
 
       - name: Migrate Database to RDS
         run: ./liquibase/liquibase update
