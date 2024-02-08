@@ -1,5 +1,6 @@
-# Enviroment Variables
+# Enviroment Files
 *.env
+liquibase.properties
 
 # Scripts Under Development
 .github/workflows/dev-db-ci.yml
