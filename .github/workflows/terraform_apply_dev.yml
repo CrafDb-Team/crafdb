@@ -1,0 +1,20 @@
+name: Dev Terraform Apply
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches:
+      - dev
+
+jobs:
+  TerraformApply:
+    runs-on: ubuntu-latest
+    needs:
+      - AssumeRoleAndCallIdentity
+      - TerraformPlan
+    steps:
+      - name: Terraform Apply
+        id: apply
+        run: |
+          echo "## Terraform Apply" >> $GITHUB_STEP_SUMMARY
+          cd terraform
+          make tf_apply >> $GITHUB_STEP_SUMMARY
