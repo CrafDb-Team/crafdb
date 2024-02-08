@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
@@ -46,7 +46,7 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE dev_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP TABLE IF EXISTS dev_temp; CREATE DATABASE dev_temp"
 
       - name: Create Liquibase Properties
         run: |
@@ -57,7 +57,7 @@ jobs:
           echo "password:" $DB_PASSWORD >> liquibase.properties
 
       - name: Test Migration
-        run: liquibase update-testing-rollback
+        run: ./liquibase/liquibase update-testing-rollback
 
       - name: Destuct Test Database
         run: |
@@ -99,7 +99,7 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE dev_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP TABLE IF EXISTS dev_temp; CREATE DATABASE dev_temp"
 
       - name: Create Liquibase Properties
         run: |
@@ -110,7 +110,7 @@ jobs:
           echo "password:" $DB_PASSWORD >> liquibase.properties
 
       - name: Test Migration
-        run: liquibase update-testing-rollback
+        run: ./liquibase/liquibase update-testing-rollback
 
       - name: Destuct Test Database
         run: |
