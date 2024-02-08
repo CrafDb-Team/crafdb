@@ -69,6 +69,7 @@ jobs:
   test_prod_db:
     name: Test Prod Spin Up DB Migration
     runs-on: ubuntu-latest
+    needs: test_empty_db
     environment: Testing
 
     steps:
