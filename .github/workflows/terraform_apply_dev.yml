@@ -4,6 +4,9 @@ on:
     branches:
       - dev
 
+env:
+  WORKING_DIRECTORY: ./terraform
+
 jobs:
   checkout_and_credentials_setup:
     permissions:
@@ -29,6 +32,7 @@ jobs:
       
     steps:
       - name: Terraform Apply
+        working-directory: ${{ env.WORKING_DIRECTORY }}
         id: apply
         run: |
           echo "## Terraform Apply" >> $GITHUB_STEP_SUMMARY

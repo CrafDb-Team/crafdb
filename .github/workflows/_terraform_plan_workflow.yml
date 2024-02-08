@@ -3,23 +3,28 @@ name: Terraform Plan
 on:
   workflow_call:
 
+env:
+  WORKING_DIRECTORY: ./terraform
+
 jobs:
   terraform_setup:
     runs-on: ubuntu-latest
     steps:
       - name: Terraform Init
+        working-directory: ${{ env.WORKING_DIRECTORY }}
         id: init
         run: |
-          cd terraform
           make tf_init
 
       - name: Terraform Validate
+        working-directory: ${{ env.WORKING_DIRECTORY }}
         id: validate
         run: |
           echo "## Terraform Validate" >> $GITHUB_STEP_SUMMARY
           make tf_validate >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Plan
+        working-directory: ${{ env.WORKING_DIRECTORY }}
         id: plan
         run: |
           echo "## Terraform Plan" >> $GITHUB_STEP_SUMMARY
