@@ -10,7 +10,7 @@ on:
 
 jobs:
   checkout_and_credentials_setup:
-    uses: .github/workflows/_setup_workflow.yml@main
+    uses: ./.github/workflows/_setup_workflow.yml@main
     secrets:
       AWS_ASSUME_ROLE: ${{ secrets.AWS_ASSUME_ROLE }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
