@@ -4,33 +4,27 @@ on:
     branches:
       - dev
 
+
 env:
   WORKING_DIRECTORY: ./terraform
 
 jobs:
-  checkout_and_credentials_setup:
-    permissions:
-      id-token: write
-      contents: read
-    runs-on: ubuntu-latest
-    steps:
-        - name: Checkout repository
-          uses: actions/checkout@v3
-        - name: Assume the deploy pipeline user role
-          uses: aws-actions/configure-aws-credentials@v4.0.1
-          with:
-            role-to-assume: ${{secrets.AWS_ASSUME_ROLE}}
-            role-session-name: GitHub_to_AWS_via_FederatedOIDC
-            aws-region: ${{secrets.AWS_REGION }}
+
   terraform_plan:
     uses: ./.github/workflows/_terraform_plan_workflow.yml
-    needs: checkout_and_credentials_setup
   TerraformApply:
     runs-on: ubuntu-latest
-    needs:
-      - terraform_plan
-      
+    needs: terraform_plan
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Assume the deploy pipeline user role
+        uses: aws-actions/configure-aws-credentials@v4.0.1
+        with:
+          role-to-assume: ${{secrets.AWS_ASSUME_ROLE}}
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{secrets.AWS_REGION }}
+          role-chaining: true
       - name: Terraform Apply
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: apply
