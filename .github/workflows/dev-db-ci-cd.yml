@@ -2,10 +2,11 @@ name: Development Database CI/CD
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, CRAF-5-setup-git-hub-actions ]
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   # ci-workflow:
@@ -35,8 +36,16 @@ jobs:
         env:
           LB_VERSION: ${{ vars.LIQUIBASE_VERSION }}
 
-      # CREATE LIQUIBASE PROPERTIES
+      - name: Retrieve Env File
+        run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
+
+      - name: Create Liquibase Properties
+        run: |
+          export $(cat .env | xargs)
+          echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
+          echo "url:" $DB_URL >> liquibase.properties
+          echo "username:" $DB_USERNAME >> liquibase.properties
+          echo "password:" $DB_PASSWORD >> liquibase.properties
 
       - name: Migrate Database to RDS
         run: ./liquibase/liquibase update
-        
