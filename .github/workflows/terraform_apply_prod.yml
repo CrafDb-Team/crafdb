@@ -6,7 +6,7 @@ on:
 
 jobs:
   terraform_plan:
-    uses: ./.github/workflows/_terraform_plan_workflow.yml@main
+    uses: ./.github/workflows/_terraform_plan_workflow.yml
     secrets:
       AWS_ASSUME_ROLE: ${{ secrets.AWS_ASSUME_ROLE }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
