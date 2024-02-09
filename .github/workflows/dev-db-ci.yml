@@ -106,8 +106,8 @@ jobs:
           export PGPASSWORD=$DB_PASSWORD
           psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS dev_temp"
           psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE dev_temp"
-          pg_dump "postgresql://$DB_USERNAME@$DB_URL/dev" --schema-only > schema.sql
-          psql "postgresql://$DB_USERNAME@$DB_URL/dev_temp" -f schema.sql
+          pg_dump "postgresql://$DB_USERNAME@$DB_URL/dev" > dump.sql
+          psql "postgresql://$DB_USERNAME@$DB_URL/dev_temp" -f dump.sql
           
 
       - name: Create Liquibase Properties
