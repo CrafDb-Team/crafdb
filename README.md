@@ -1,9 +1,8 @@
-# Craft Brewery ERD
+# crafdb
 
-[![hackmd-github-sync-badge](https://hackmd.io/Q94ZbKATT1-LXX19sRTHTA/badge)](https://hackmd.io/Q94ZbKATT1-LXX19sRTHTA)
+A db for a small scale brewery, that sells craft beer.
 
-
-[TOC]
+#[TOC]
 
 ## Diagram
 
