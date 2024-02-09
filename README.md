@@ -7,6 +7,78 @@
 
 ## Diagram
 
+### MVP
+
+```mermaid
+erDiagram
+Beer ||--|| BeerType: Is
+Beer {
+    INT ID
+    VARCHAR(255) Name
+    INT TypeID
+}
+
+BeerType
+BeerType {
+    INT ID
+    VARCHAR(100) Name
+}
+BeerKegStatus {
+    INT ID
+    VARCHAR(255) Title
+    VARCHAR(1024) Description
+}
+BeerKeg }o--|| Beer: Of
+BeerKeg }|--o{ OrderItem: Belongs
+BeerKeg ||--|| BeerKegStatus: Is
+BeerKeg {
+    INT ID
+    INT BeerID
+    INT BatchID
+    INT BatchStatusID
+    INT TankID
+    DECIMAL Quantity
+    DECIMAL Price
+    DATE ProducedOn
+}
+
+Customer }o--|{ Order: Has
+Customer ||--o{ Email: Has
+Customer ||--o{ ContactNumber: Has
+Customer {
+    INT ID
+    VARCHAR(100) Name
+}
+
+Email {
+    INT ID
+    INT CustomerID
+    VARCHAR(255) Address
+}
+
+ContactNumber {
+    INT ID
+    INT CustomerID
+    VARCHAR(10) Number
+}
+
+Order ||--|{ OrderItem: Has
+Order {
+    INT ID
+    INT CustomerID
+    DATE OrderedOn
+}
+
+OrderItem {
+    INT ID
+    INT OrderID
+    INT BeerKegID
+}
+
+```
+
+### Production WIP
+
 ```mermaid
 erDiagram
 Tank ||--|| TankType: Of
