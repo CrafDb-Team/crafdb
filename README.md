@@ -34,12 +34,9 @@ BeerKeg ||--|| BeerKegStatus: Is
 BeerKeg {
     INT ID
     INT BeerID
-    INT BatchID
-    INT BatchStatusID
-    INT TankID
     DECIMAL Quantity
     DECIMAL Price
-    DATE ProducedOn
+    DATE PackagedOn
 }
 
 Customer }o--|{ Order: Has
@@ -113,19 +110,27 @@ BeerType {
     VARCHAR(100) Name
 }
 
-Batch }o--|| Beer: Of
-Batch }|--o{ Order: Belongs
+Batch ||--|{ BeerKeg: Produces
 Batch ||--|| Recipe: Of
+Batch }|--|| Beer: Of
 Batch ||--|| Tank: Contains
 Batch ||--|| BatchStatus: Contains
 Batch {
     INT ID
-    INT BeerID
-    INT BatchID
-    INT BatchStatusID
     INT TankID
-    DECIMAL Price
+    INT BeerID
+    INT BatchStatusID
     DATE ProducedOn
+    DECIMAL Quantity
+}
+
+BeerKeg }o--|| Batch: Of
+BeerKeg }|--o{ OrderItem: Is
+BeerKeg {
+    INT ID
+    INT BatchID
+    DECIMAL Quantity
+    DECIMAL Price
 }
 
 BatchStatus {
@@ -154,10 +159,17 @@ ContactNumber {
     VARCHAR(10) Number
 }
 
+Order ||--|{ OrderItem: Contains
 Order {
     INT ID
     INT CustomerID
     DATE OrderedOn
+}
+
+OrderItem {
+    INT ID
+    INT OrderID
+    INT BeerKegID
 }
 
 Recipe ||--|| RecipeStatus : Contains
@@ -197,13 +209,6 @@ BatchProductionStep {
     INT BatchID
     INT RecipesInstructionsID
     INT StatusID
-}
-
-
-Status {
-    INT ID
-    VARCHAR(255) ShortName
-    VARCHAR(1024) Description
 }
 ```
 
