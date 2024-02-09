@@ -111,7 +111,7 @@ BeerType {
 }
 
 Batch ||--|{ BeerKeg: Produces
-Batch ||--|| Recipe: Of
+Batch ||--|| Process: Of
 Batch }|--|| Beer: Of
 Batch ||--|| Tank: Contains
 Batch ||--|| BatchStatus: Contains
@@ -172,42 +172,42 @@ OrderItem {
     INT BeerKegID
 }
 
-Recipe ||--|| RecipeStatus : Contains
-Recipe }o--o{ RecipesInstructions: Contains
-Recipe {
+Process ||--|| ProcessStatus : Contains
+Process }o--o{ ProcessInstructions: Contains
+Process {
     INT ID
     VARCHAR(255) Title
     INT StatusID
     DATE CreatedOn
 }
 
-RecipeStatus {
+ProcessStatus {
     INT ID
     VARCHAR(255) Title
     VARCHAR(1024) Description    
 }
 
 
-Instruction }o--o{ RecipesInstructions : Belongs
+Instruction }o--o{ ProcessInstructions : Belongs
 Instruction {
     INT ID
     VARCHAR(255) Title
     VARCHAR(1024) Description
 }
 
-RecipesInstructions {
+ProcessInstructions {
     INT ID
-    INT RecipeID
+    INT ProcessID
     INT InstructionID
     INT OrdinalNumber
 }
 
 Batch |o--o{ BatchProductionStep: Brewing
-BatchProductionStep ||--|{ RecipesInstructions: Follows
+BatchProductionStep ||--|{ ProcessInstructions: Follows
 BatchProductionStep {
     INT ID
     INT BatchID
-    INT RecipesInstructionsID
+    INT ProcessInstructionsID
     INT StatusID
 }
 ```
