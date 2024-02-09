@@ -69,7 +69,6 @@ jobs:
   test_prod_db:
     name: Test Dev Replica DB Migration
     runs-on: ubuntu-latest
-    needs: test_empty_db
     environment: Testing
 
     steps:
@@ -105,8 +104,8 @@ jobs:
           export PGPASSWORD=$DB_PASSWORD
           psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS dev_temp"
           psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE dev_temp"
-          pg_dump "postgresql://$DB_USERNAME@$DB_URL" -d dev --schema-only > schema.sql
-          psql "postgresql://$DB_USERNAME@$DB_URL" -d new_template_database -f schema.sql
+          pg_dump "postgresql://$DB_USERNAME@$DB_URL/dev" --schema-only > schema.sql
+          psql "postgresql://$DB_USERNAME@$DB_URL/dev_temp" -f schema.sql
           
 
       - name: Create Liquibase Properties
