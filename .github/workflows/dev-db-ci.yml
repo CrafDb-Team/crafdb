@@ -109,7 +109,6 @@ jobs:
           pg_dump "postgresql://$DB_USERNAME@$DB_URL/dev" > dump.sql
           psql "postgresql://$DB_USERNAME@$DB_URL/dev_temp" -f dump.sql
           
-
       - name: Create Liquibase Properties
         run: |
           export $(cat .env | xargs)
