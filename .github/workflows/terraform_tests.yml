@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   terraform_setup:
+    name: Terraform Setup
     runs-on: ubuntu-latest
 
     steps:
