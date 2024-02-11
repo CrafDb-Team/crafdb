@@ -7,12 +7,13 @@ on:
 env:
   WORKING_DIRECTORY: ./terraform
 
+
+permissions:
+  contents: read
+  id-token: write
 jobs:
   terraform_plan:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
