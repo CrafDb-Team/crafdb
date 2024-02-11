@@ -10,6 +10,16 @@ permissions:
   id-token: write
 
 jobs:
+  terraform_test_workflow: 
+    name: Terraform Test
+    uses: ./.github/workflows/terraform_tests.yml
+    secrets: inherit
+    
+  terraform_apply_workflow: 
+    name: Terraform Apply
+    uses: ./.github/workflows/terraform_apply.yml
+    secrets: inherit
+
   test_empty_db:
     name: Test Empty DB Migration
     runs-on: ubuntu-latest

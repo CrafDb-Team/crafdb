@@ -1,8 +1,7 @@
 name: Terraform Tests
 
 on:
-  pull_request:
-    types: [opened, edited, synchronize]
+  workflow_call: 
 
 env:
   WORKING_DIRECTORY: './terraform'
@@ -43,5 +42,3 @@ jobs:
         run: |
           echo "## Terraform Plan" >> $GITHUB_STEP_SUMMARY
           make tf_plan >> $GITHUB_STEP_SUMMARY
-      
-
