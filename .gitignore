@@ -1,6 +1,3 @@
 # Enviroment Files
 *.env
 liquibase.properties
-
-# Scripts Under Development
-.github/workflows/prod-db-ci.yml

@@ -2,7 +2,7 @@ name: Development Database CI/CD
 
 on:
   push:
-    branches: [ dev, CRAF-5-setup-git-hub-actions ]
+    branches: [ dev ]
 
 permissions:
   contents: read
@@ -14,7 +14,7 @@ jobs:
     uses: ./.github/workflows/dev-db-ci.yml
     secrets: inherit
 
-  migrate_db:
+  migrate_dev_db:
     name: Migrate Dev DB
     needs: ci-workflow
     runs-on: ubuntu-latest
