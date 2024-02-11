@@ -1,0 +1,52 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  ci-workflow:
+    uses: ./.github/workflows/prod-db-ci.yml
+    secrets: inherit
+
+  migrate_prod_db:
+    name: Migrate Prod DB
+    needs: ci-workflow
+    runs-on: ubuntu-latest
+    environment: Production
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Liquibase
+        run: |
+          curl -L https://github.com/liquibase/liquibase/releases/download/v${LB_VERSION}/liquibase-${LB_VERSION}.zip --output liquibase.zip
+          unzip -o -d liquibase liquibase.zip
+        env:
+          LB_VERSION: ${{ vars.LIQUIBASE_VERSION }}
+  
+      - name: Retrieve Env File
+        run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
+
+      - name: Create Liquibase Properties
+        run: |
+          export $(cat .env | xargs)
+          echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
+          echo "url:" $DB_URL >> liquibase.properties
+          echo "username:" $DB_USERNAME >> liquibase.properties
+          echo "password:" $DB_PASSWORD >> liquibase.properties
+
+      - name: Migrate Database to RDS
+        run: ./liquibase/liquibase update
+        

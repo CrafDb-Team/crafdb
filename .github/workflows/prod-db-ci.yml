@@ -1,0 +1,127 @@
+name: Database Production CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_call:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test_empty_db:
+    name: Test Empty DB Migration
+    runs-on: ubuntu-latest
+    environment: Testing
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install psql
+        run: |
+          sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get -y install postgresql
+      
+      - name: Install Liquibase
+        run: |
+          curl -L https://github.com/liquibase/liquibase/releases/download/v${LB_VERSION}/liquibase-${LB_VERSION}.zip --output liquibase.zip
+          unzip -o -d liquibase liquibase.zip
+        env:
+          LB_VERSION: ${{ vars.LIQUIBASE_VERSION }}
+
+      - name: Retrieve Env File
+        run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
+
+      - name: Create Test Database
+        run: |
+          export $(cat .env | xargs)
+          export PGPASSWORD=$DB_PASSWORD
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS empty_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE empty_temp"
+
+      - name: Create Liquibase Properties
+        run: |
+          export $(cat .env | xargs)
+          echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
+          echo "url: jdbc:postgresql://${DB_URL}/empty_temp" >> liquibase.properties
+          echo "username:" $DB_USERNAME >> liquibase.properties
+          echo "password:" $DB_PASSWORD >> liquibase.properties
+
+      - name: Test Migration and Rollback
+        run: ./liquibase/liquibase update-testing-rollback
+
+      - name: Drop Test Database
+        run: |
+          export $(cat .env | xargs)
+          export PGPASSWORD=$DB_PASSWORD
+          psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE empty_temp"
+
+  test_prod_db:
+    name: Test Dev Replica DB Migration
+    runs-on: ubuntu-latest
+    environment: Testing
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install psql
+        run: |
+          sudo apt install wget ca-certificates
+          sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get -y install postgresql
+          sudo ln -s /usr/lib/postgresql/16/bin/pg_dump /usr/bin/pg_dump --force
+      
+      - name: Install Liquibase
+        run: |
+          curl -L https://github.com/liquibase/liquibase/releases/download/v${LB_VERSION}/liquibase-${LB_VERSION}.zip --output liquibase.zip
+          unzip -o -d liquibase liquibase.zip
+        env:
+          LB_VERSION: ${{ vars.LIQUIBASE_VERSION }}
+
+      - name: Retrieve Env File
+        run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
+
+      - name: Create Test Database
+        run: |
+          export $(cat .env | xargs)
+          export PGPASSWORD=$DB_PASSWORD
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS prod_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE prod_temp"
+          pg_dump "postgresql://$DB_USERNAME@$DB_URL/prod" > dump.sql
+          psql "postgresql://$DB_USERNAME@$DB_URL/prod_temp" -f dump.sql
+          
+      - name: Create Liquibase Properties
+        run: |
+          export $(cat .env | xargs)
+          echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
+          echo "url: jdbc:postgresql://${DB_URL}/prod_temp" >> liquibase.properties
+          echo "username:" $DB_USERNAME >> liquibase.properties
+          echo "password:" $DB_PASSWORD >> liquibase.properties
+
+      - name: Test Migration and Rollback
+        run: ./liquibase/liquibase update-testing-rollback
+
+      - name: Drop Test Database
+        run: |
+          export $(cat .env | xargs)
+          export PGPASSWORD=$DB_PASSWORD
+          psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE prod_temp"
