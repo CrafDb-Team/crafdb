@@ -17,11 +17,13 @@ jobs:
     
   terraform_apply_workflow: 
     name: Terraform Apply
+    needs: terraform_test_workflow
     uses: ./.github/workflows/terraform_apply.yml
     secrets: inherit
 
   test_empty_db:
     name: Test Empty DB Migration
+    needs: terraform_apply_workflow
     runs-on: ubuntu-latest
     environment: Testing
 
@@ -78,6 +80,7 @@ jobs:
 
   test_prod_db:
     name: Test Dev Replica DB Migration
+    needs: terraform_apply_workflow
     runs-on: ubuntu-latest
     environment: Testing
 
