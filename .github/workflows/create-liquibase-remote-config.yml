@@ -1,0 +1,54 @@
+name: Create/Update liquibase config file in S3
+
+on:
+    workflow_call:
+        inputs:
+            DB_INSTANCE_NAME:
+                type: string
+                description: 'DB Instance Name'
+                required: true
+                default: 'craft-beer-db'
+            AWS_ASSUME_ROLE:
+                type: string
+                description: 'AWS Assume Role'
+                required: true
+            AWS_REGION: 
+                type: string
+                description: 'AWS Region'
+                required: true
+                default: 'eu-west-1'
+            DB_USERNAME: 
+                type: string
+                description: 'DB Username'
+                required: true
+            DB_PASSWORD: 
+                type: string
+                description: 'DB Password'
+                required: true
+            LIQUIBASE_CONFIG_BUCKET:
+                type: string
+                description: 'Liquibase Config Bucket'
+                required: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - name: checkout-repository
+          uses: actions/checkout@v4
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            role-to-assume: ${{ inputs.AWS_ASSUME_ROLE }}
+            aws-region: ${{ inputs.AWS_REGION }}
+        - name: Fetch AWS RDS Enpoint address
+          run: |
+                echo "Fetching AWS RDS Enpoint address"
+                echo "DB_URL=$(aws rds describe-db-instances --db-instance-identifier ${{ inputs.DB_INSTANCE_NAME}} --query 'DBInstances[0].Endpoint.Address' --output text):$(aws rds describe-db-instances --db-instance-identifier craft-beer-db --query 'DBInstances[0].Endpoint.Port' --output text)" >> $GITHUB_ENV
+        - name: Create/Update liquibase config file in S3
+          run: |
+                echo "Creating liquibase config file in S3"
+                echo echo -e 'CHANGELOG_FILE="changelog.yaml"
+                DB_URL="${{env.DB_URL}}"
+                DB_USERNAME="${{inputs.DB_USERNAME}}"
+                DB_PASSWORD="${{inputs.DB_PASSWORD}}"' |  aws s3 cp - s3://${{inputs.LIQUIBASE_CONFIG_BUCKET}}/.env
