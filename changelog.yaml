@@ -1,5 +1,3 @@
 databaseChangeLog:
-    - include:
-          file: sql/test.sql
-    - include:
-          file: sql/file1.sql
+   - include:
+       file: sql/test.sql
