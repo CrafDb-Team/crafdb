@@ -1,3 +1,7 @@
 databaseChangeLog:
    - include:
-       file: sql/test.sql
+       file: sql/batch.sql
+   - include:
+       file: sql/keg.sql
+   - include:
+       file: sql/reference.sql
