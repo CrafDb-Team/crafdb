@@ -7,4 +7,4 @@ CREATE TABLE CustomerOrder (
   CreatedOn datetime NOT NULL
 );
 
--- rollback DROP TABLE Order;
+-- rollback DROP TABLE CustomerOrder;
