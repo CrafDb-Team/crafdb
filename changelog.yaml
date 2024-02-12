@@ -1,3 +1,3 @@
 databaseChangeLog:
    - include:
-       file: sql/test.sql
+       file: sql/orders.sql
