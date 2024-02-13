@@ -64,8 +64,6 @@ jobs:
     name: Dev CI
     needs: terraform_apply
     uses: ./.github/workflows/create-liquibase-remote-config.yml
-    with:
-      DB_INSTANCE_NAME: craft-beer-db
     secrets: inherit
 
   database_setup:
