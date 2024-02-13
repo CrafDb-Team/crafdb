@@ -22,7 +22,7 @@ jobs:
     - name: Fetch AWS RDS Enpoint address
       run: |
         echo "Fetching AWS RDS Enpoint address"
-        echo "DB_URL=$(aws rds describe-db-instances --db-instance-identifier ${{ secrets.DB_INSTANCE_NAME }} --query 'DBInstances[0].Endpoint.Address' --output text):$(aws rds describe-db-instances --db-instance-identifier craft-beer-db --query 'DBInstances[0].Endpoint.Port' --output text)" >> $GITHUB_ENV
+        echo "DB_URL=$(aws rds describe-db-instances --db-instance-identifier ${{ env.DB_INSTANCE_NAME }} --query 'DBInstances[0].Endpoint.Address' --output text):$(aws rds describe-db-instances --db-instance-identifier craft-beer-db --query 'DBInstances[0].Endpoint.Port' --output text)" >> $GITHUB_ENV
     
     - name: Create/Update liquibase config file in S3
       run: |
