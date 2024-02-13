@@ -23,7 +23,7 @@ Description of project...
 Clone the project
 
 ```bash
-  git clone https://https://github.com/CrafDb-Team/crafdb
+  git clone https://github.com/CrafDb-Team/crafdb
 ```
 
 Go to the project directory
