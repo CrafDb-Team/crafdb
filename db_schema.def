@@ -1,0 +1,71 @@
+Table Customer {
+  CustomerID integer [primary key]
+  Name varchar
+  Email varchar
+  ContactNumber varchar
+}
+ 
+Table Order {
+  OrderID integer [primary key]
+  CustomerID integer
+  CreatedOn datetime
+}
+ 
+Table OrderItem {
+  ItemID integer [primary key]
+  OrderID integer
+  KegID integer
+  OrderStateID integer
+  PriceAtSale numeric
+}
+ 
+Table OrderItemState {
+  OrderItemStateID integer [primary key]
+  OrderState varchar
+}
+
+Table Keg {
+  KegID integer [primary key]
+  BatchID integer
+  ExpiryDate date
+}
+ 
+Table Beer {
+  BeerID integer [primary key]
+  BeerName varchar
+  BeerDesc varchar
+  BeerTypeID integer
+  PricePerKeg numeric
+}
+
+Table BeerType {
+  BeerTypeID integer [primary key]
+  BeerType varchar
+}
+ 
+Table Batch {
+  BatchID integer [primary key]
+  BeerID integer
+  BatchStatusID integer
+}
+ 
+Table BatchStatus {
+  BatchStatusID integer [primary key]
+  Status varchar
+}
+
+Ref: BeerType.BeerTypeID < Beer.BeerTypeID
+
+Ref: Keg.BatchID > Batch.BatchID
+ 
+Ref: Batch.BeerID > Beer.BeerID
+ 
+Ref: Customer.CustomerID < Order.CustomerID
+ 
+Ref: Order.OrderID < OrderItem.OrderID
+ 
+Ref: OrderItem.KegID > Keg.KegID
+ 
+Ref: OrderItem.OrderStateID - OrderItemState.OrderItemStateID
+ 
+Ref: Batch.BatchStatusID > BatchStatus.BatchStatusID
