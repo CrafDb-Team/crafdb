@@ -14,3 +14,9 @@ ADD CONSTRAINT Batch_BeerID_FK FOREIGN KEY (BeerID) REFERENCES Beer (BeerID);
 ALTER TABLE Batch 
 ADD CONSTRAINT Batch_BatchStatusID_FK OREIGN KEY (BatchStatusID) REFERENCES BatchStatus (BatchStatusID);
 -- rollback ALTER TABLE Batch DROP CONSTRAINT Batch_BatchStatusID_FK
+
+--changeset ljordaan:alter-table-beer-table
+ALTER TABLE Beer
+ADD CONSTRAINT Beer_BeerTypeID_FK FOREIGN KEY (BeerTypeID)
+  REFERENCES BeerType(BeerTypeID);
+-- rollback ALTER TABLE Beer DROP CONSTRAINT Beer_BeerTypeID_FK
