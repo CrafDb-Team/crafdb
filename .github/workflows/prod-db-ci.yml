@@ -15,17 +15,17 @@ jobs:
     uses: ./.github/workflows/terraform_tests.yml
     secrets: inherit
     
-  terraform_apply_workflow: 
-    name: Terraform Apply CI
+  database_setup_workflow: 
+    name: Database Setup for Testing
     needs: terraform_test_workflow
     uses: ./.github/workflows/database_setup.yml
     with:
-      TERRAFORM_APPLY_BRANCH: main
+      TERRAFORM_APPLY_BRANCH: dev
     secrets: inherit
 
   test_empty_db:
     name: Test Empty DB Migration
-    needs: terraform_apply_workflow
+    needs: database_setup_workflow
     runs-on: ubuntu-latest
     environment: Testing
 
@@ -82,7 +82,7 @@ jobs:
 
   test_prod_db:
     name: Test Dev Replica DB Migration
-    needs: terraform_apply_workflow
+    needs: database_setup_workflow
     runs-on: ubuntu-latest
     environment: Testing
 
