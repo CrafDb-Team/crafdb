@@ -9,7 +9,7 @@
 
 </div>
 
-Description of project...
+ABC Craft Beers new database management system, which hopes to enhance resource efficiency, customer order tracking, and the brewing processes.
 
 ## Project Resources:
 
