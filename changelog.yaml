@@ -1,7 +1,11 @@
 databaseChangeLog:
-  - include:
+    - include:
+       file: sql/batch.sql
+    - include:
+       file: sql/keg.sql
+    - include:
       file: sql/customer.sql
-  - include:
+    - include:
       file: sql/beer.sql
-  - include:
+    - include:
       file: sql/references.sql
