@@ -12,7 +12,7 @@ ADD CONSTRAINT Batch_BeerID_FK FOREIGN KEY (BeerID) REFERENCES Beer (BeerID);
 
 -- changeset rtrickett:keg-batch-fk
 ALTER TABLE Batch 
-ADD CONSTRAINT Batch_BatchStatusID_FK OREIGN KEY (BatchStatusID) REFERENCES BatchStatus (BatchStatusID);
+ADD CONSTRAINT Batch_BatchStatusID_FK FOREIGN KEY (BatchStatusID) REFERENCES BatchStatus (BatchStatusID);
 -- rollback ALTER TABLE Batch DROP CONSTRAINT Batch_BatchStatusID_FK
 
 --changeset ljordaan:alter-table-beer-table
