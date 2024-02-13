@@ -24,6 +24,7 @@ jobs:
     uses: ./.github/workflows/database_setup.yml
     with:
       TERRAFORM_APPLY_BRANCH: dev
+      DB_INSTANCE_NAME: ${{vars.DB_INSTANCE_NAME}}
     secrets: inherit
 
   test_empty_db:
