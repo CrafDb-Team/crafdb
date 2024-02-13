@@ -76,7 +76,6 @@ jobs:
         id: apply
         run: |
           echo "## Terraform Apply" >> $GITHUB_STEP_SUMMARY
-          cd terraform
           make tf_apply >> $GITHUB_STEP_SUMMARY
 
   setup_database_env_file:
