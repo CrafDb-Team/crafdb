@@ -14,10 +14,5 @@ CREATE TABLE OrderItemState (
   OrderState varchar(32) NOT NULL
 );
 
-ALTER TABLE OrderItem
-ADD CONSTRAINT OrderItem_OrderItemStateID_FK FOREIGN KEY(OrderItemStateID)
-    REFERENCES OrderItemState(OrderItemStateID)
-
 -- rollback DROP TABLE OrderItem;
 -- rollback DROP TABLE OrderItemState;
--- rollback ALTER TABLE OrderItem DROP CONSTRAINT OrderItem_OrderItemStateID_FK;
