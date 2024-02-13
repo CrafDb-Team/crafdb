@@ -66,6 +66,6 @@ Ref: Order.OrderID < OrderItem.OrderID
  
 Ref: OrderItem.KegID > Keg.KegID
  
-Ref: OrderItem.OrderStateID - OrderItemState.OrderItemStateID
+Ref: OrderItem.OrderStateID > OrderItemState.OrderItemStateID
  
 Ref: Batch.BatchStatusID > BatchStatus.BatchStatusID
