@@ -49,4 +49,4 @@ jobs:
           echo "password:" $DB_PASSWORD >> liquibase.properties
 
       - name: Migrate Database to RDS
-        run: ./liquibase/liquibase update
+        run: ./liquibase/liquibase update --rollback-on-error=true
