@@ -2,6 +2,11 @@ name: Terraform Tests
 
 on:
   workflow_call: 
+    inputs:
+      DB_INSTANCE_NAME:
+        description: 'DB Instance Name'
+        required: true
+        type: string
 
 env:
   WORKING_DIRECTORY: './terraform'
@@ -42,4 +47,4 @@ jobs:
         id: plan
         run: |
           echo "## Terraform Plan" >> $GITHUB_STEP_SUMMARY
-          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{env.DB_INSTANCE_NAME}} tf_plan >> $GITHUB_STEP_SUMMARY
+          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan >> $GITHUB_STEP_SUMMARY

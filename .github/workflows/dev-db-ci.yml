@@ -14,6 +14,9 @@ jobs:
     name: Terraform Test
     uses: ./.github/workflows/terraform_tests.yml
     secrets: inherit
+    with:
+      DB_INSTANCE_NAME: ${{vars.DB_INSTANCE_NAME}}
+
     
   database_setup_workflow: 
     name: Database Setup for Testing
