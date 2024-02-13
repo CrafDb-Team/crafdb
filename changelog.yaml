@@ -4,4 +4,6 @@ databaseChangeLog:
    - include:
        file: sql/keg.sql
    - include:
+       file: sql/customer.sql
+   - include:
        file: sql/reference.sql
