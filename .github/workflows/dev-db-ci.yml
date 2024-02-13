@@ -18,7 +18,7 @@ jobs:
   terraform_apply_workflow: 
     name: Terraform Apply CI
     needs: terraform_test_workflow
-    uses: ./.github/workflows/terraform_apply.yml
+    uses: ./.github/workflows/database_setup.yml
     with:
       TERRAFORM_APPLY_BRANCH: dev
     secrets: inherit

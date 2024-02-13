@@ -1,4 +1,4 @@
-name: Terraform Apply
+name: Database Setup
 
 on:
   workflow_call:
@@ -79,10 +79,17 @@ jobs:
           cd terraform
           make tf_apply >> $GITHUB_STEP_SUMMARY
 
+  setup_database_env_file:
+    name: Dev CI
+    uses: ./.github/workflows/create-liquibase-remote-config.yml
+    with:
+      DB_INSTANCE_NAME: craft-beer-db
+    secrets: inherit
+
   database_setup:
     name: Check and Setup Database
     runs-on: ubuntu-latest
-    needs: terraform_apply
+    needs: setup_database_env_file
 
     steps:
       - name: Checkout repository
