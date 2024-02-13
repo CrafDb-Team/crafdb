@@ -49,6 +49,6 @@ jobs:
           run: |
                 echo "Creating liquibase config file in S3"
                 echo echo -e 'CHANGELOG_FILE="changelog.yaml"
-                DB_URL="${{env.DB_URL}}"
-                DB_USERNAME="${{inputs.DB_USERNAME}}"
-                DB_PASSWORD="${{inputs.DB_PASSWORD}}"' |  aws s3 cp - s3://${{inputs.LIQUIBASE_CONFIG_BUCKET}}/.env
+                DB_URL="${{ env.DB_URL }}"
+                DB_USERNAME="${{ inputs.DB_USERNAME }}"
+                DB_PASSWORD="${{ inputs.DB_PASSWORD }}"' |  aws s3 cp - s3://${{inputs.LIQUIBASE_CONFIG_BUCKET}}/.env
