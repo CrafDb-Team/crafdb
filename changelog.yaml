@@ -1,3 +1,7 @@
 databaseChangeLog:
-      - include:
-              file: sql/customer.sql
+  - include:
+      file: sql/customer.sql
+  - include:
+      file: sql/beer.sql
+  - include:
+      file: sql/references.sql
