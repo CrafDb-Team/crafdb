@@ -1,5 +1,12 @@
 -- liquibase formatted sql
 
+-- changeset batandwa:order-items-orders-fk-creation
+ALTER TABLE OrderItem
+ADD CONSTRAINT OrderItem_OrderItemStateID_FK FOREIGN KEY(OrderItemStateID)
+    REFERENCES OrderItemState(OrderItemStateID)
+
+-- rollback ALTER TABLE OrderItem DROP CONSTRAINT OrderItem_OrderItemStateID_FK;
+=======
 -- changeset rtrickett:keg-batch-fk
 ALTER TABLE Keg 
 ADD CONSTRAINT Keg_BatchID_FK FOREIGN KEY (BatchID) REFERENCES Batch (BatchID);

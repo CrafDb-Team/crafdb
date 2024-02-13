@@ -1,11 +1,13 @@
 databaseChangeLog:
+   - include:
+       file: sql/order-items.sql
     - include:
        file: sql/batch.sql
     - include:
        file: sql/keg.sql
     - include:
-      file: sql/customer.sql
+       file: sql/customer.sql
     - include:
-      file: sql/beer.sql
+       file: sql/beer.sql
     - include:
-      file: sql/references.sql
+       file: sql/references.sql
