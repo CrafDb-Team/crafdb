@@ -11,6 +11,6 @@ CREATE TABLE Batch (
 -- changeset rtrickett:create-batch-status-table
 CREATE TABLE BatchStatus (
   BatchStatusID serial PRIMARY KEY,
-  BatchStatus varchar
+  BatchStatus varchar NOT NULL
 );
 -- rollback DROP TABLE BatchStatus
