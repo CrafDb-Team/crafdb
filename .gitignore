@@ -9,3 +9,4 @@ terraform/terraform.tfstate.backup
 # Enviroment Files
 *.env
 liquibase.properties
+liquibase-keyring.gpg
