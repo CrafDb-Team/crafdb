@@ -64,8 +64,8 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS empty_temp"
-          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE empty_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS empty_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE empty_temp"
 
       - name: Create Liquibase Properties
         run: |
@@ -82,7 +82,7 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE empty_temp"
+          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE empty_temp"
 
   test_prod_db:
     name: Test Dev Replica DB Migration
@@ -123,8 +123,8 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS dev_temp"
-          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE dev_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS dev_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE dev_temp"
           pg_dump "postgresql://$DB_USERNAME@$DB_URL/dev" > dump.sql
           psql "postgresql://$DB_USERNAME@$DB_URL/dev_temp" -f dump.sql
           
@@ -143,4 +143,4 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE dev_temp"
+          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE dev_temp"

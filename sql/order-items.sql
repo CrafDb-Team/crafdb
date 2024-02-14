@@ -8,11 +8,11 @@ CREATE TABLE "OrderItem" (
   "OrderItemStateID" integer NOT NULL,
   "PriceAtSale" numeric NOT NULL
 );
--- rollback DROP TABLE OrderItem;
+-- rollback DROP TABLE "OrderItem";
 
 -- changeset batandwa:create-order-items-status-table
 CREATE TABLE "OrderItemState" (
   "OrderItemStateID" serial PRIMARY KEY,
   "OrderState" varchar(32) NOT NULL
 );
--- rollback DROP TABLE OrderItemState;
+-- rollback DROP TABLE "OrderItemState";
