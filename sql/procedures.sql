@@ -2,21 +2,14 @@
 
 --changeset emokoena:CreateOderItemsForCustomerOrder
 CREATE PROCEDURE CreateOderItemsForCustomerOrder(
-   customer_id int,
-   beer_id int,  
-   quantity int,
-   order_id int
+   beer_id integer,  
+   order_id integer,
+   quantity integer,
 )
 LANGUAGE plpgsql    
 AS 
 $$
 BEGIN
-    /*
-    OrderID integer NOT NULL,
-    KegID integer NOT NULL,
-    OrderItemStateID integer NOT NULL,
-    PriceAtSale numeric NOT NULL
-    */
     INSERT INTO OrderItem oi (OrderID, KegID, OrderItemStateID, PriceAtSale)
     SELECT 
         order_id,
@@ -39,4 +32,4 @@ BEGIN
     COMMIT;
 END;
 $$;
--- rollback DROP PROCEDURE IF EXISTS CreateOderItemsForCustomerOrder(INTEGER,INTEGER,INTEGER,INTEGER);
+-- rollback DROP PROCEDURE IF EXISTS CreateOderItemsForCustomerOrder(INTEGER,INTEGER,INTEGER);
