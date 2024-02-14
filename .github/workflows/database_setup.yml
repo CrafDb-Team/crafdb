@@ -39,8 +39,7 @@ jobs:
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: init
-        run: |
-          make tf_init
+        run: make tf_init
 
       - name: Terraform Validate
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -50,16 +49,12 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: plan
-        run: |
-          echo "## Terraform Plan" >> $GITHUB_STEP_SUMMARY
-          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan>> $GITHUB_STEP_SUMMARY
+        run: make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan
 
       - name: Terraform Apply
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: apply
-        run: |
-          echo "## Terraform Apply" >> $GITHUB_STEP_SUMMARY
-          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_apply >> $GITHUB_STEP_SUMMARY
+        run: make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_apply
 
   setup_database_env_file:
     name: Dev CI
