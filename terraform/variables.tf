@@ -19,3 +19,9 @@ variable "aws_resource_owner" {
   type        = string
   #   default     = "luke.bradford@bbd.co.za"
 }
+
+variable "rds_instance_identifier" {
+  description = "The identifier for the RDS instance"
+  type        = string
+
+}
