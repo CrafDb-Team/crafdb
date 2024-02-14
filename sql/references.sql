@@ -24,3 +24,15 @@ ADD CONSTRAINT "Batch_BatchStatusID_FK" FOREIGN KEY ("BatchStatusID") REFERENCES
 ALTER TABLE "Beer"
 ADD CONSTRAINT "Beer_BeerTypeID_FK" FOREIGN KEY ("BeerTypeID") REFERENCES "BeerType"("BeerTypeID");
 -- rollback ALTER TABLE "Beer" DROP CONSTRAINT "Beer_BeerTypeID_FK"
+
+--changeset batandwa:order-item-order-id-fk
+ALTER TABLE "OrderItem"
+ADD CONSTRAINT "OrderItem_OrderID_FK" FOREIGN KEY ("OrderID")
+  REFERENCES "Order" ("OrderID");
+-- rollback ALTER TABLE OrderItem DROP CONSTRAINT OrderItem_OrderID_FK;
+
+--changeset batandwa:order-customer-id-fk
+ALTER TABLE "Order"
+ADD CONSTRAINT "Order_CustomerID_FK" FOREIGN KEY ("CustomerID")
+  REFERENCES "Customer" ("CustomerID");
+-- rollback ALTER TABLE OrderItem DROP CONSTRAINT Order_CustomerID_FK;
