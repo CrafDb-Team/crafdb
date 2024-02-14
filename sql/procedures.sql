@@ -4,13 +4,13 @@
 CREATE PROCEDURE CreateOderItemsForCustomerOrder(
    beer_id integer,  
    order_id integer,
-   quantity integer,
+   inout quantity integer
 )
 LANGUAGE plpgsql    
 AS 
 $$
 BEGIN
-    INSERT INTO OrderItem oi (OrderID, KegID, OrderItemStateID, PriceAtSale)
+    INSERT INTO OrderItem(OrderID, KegID, OrderItemStateID, PriceAtSale)
     SELECT 
         order_id,
         kg.KegID,
@@ -22,13 +22,14 @@ BEGIN
         SELECT 
             KegID, 
             OrderItemStateID 
-        FROM OrderItem oi2 
-        WHERE oi2.KegID = kg.KegID
-        AND oi2.OrderItemStateID IN (0, 1, 2, 3)
+        FROM OrderItem oi 
+        WHERE oi.KegID = kg.KegID
+        AND oi.OrderItemStateID IN (0, 1, 2, 3)
     )
     AND kg.BeerID = beer_id
     LIMIT quantity;
 
+    GET DIAGNOSTICS quantity := ROW_COUNT;
     COMMIT;
 END;
 $$;
