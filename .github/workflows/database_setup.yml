@@ -91,5 +91,5 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE IF NOT EXISTS dev"
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE IF NOT EXISTS craft_beer_db"
+          psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'dev'" | grep -q 1 | psql -U postgres -c "CREATE DATABASE dev"
+          psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'craft_beer_db'" | grep -q 1 | psql -U postgres -c "CREATE DATABASE craft_beer_db"
