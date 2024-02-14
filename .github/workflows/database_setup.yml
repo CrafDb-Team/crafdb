@@ -45,9 +45,7 @@ jobs:
       - name: Terraform Validate
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: validate
-        run: |
-          echo "## Terraform Validate" >> $GITHUB_STEP_SUMMARY
-          make tf_validate >> $GITHUB_STEP_SUMMARY
+        run: make tf_validate
 
       - name: Terraform Plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
