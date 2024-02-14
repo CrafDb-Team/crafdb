@@ -33,6 +33,7 @@ BEGIN
         WHERE oi2.KegID = kg.KegID
         AND oi2.OrderItemStateID IN (0, 1, 2, 3)
     )
+    AND kg.BeerID = beer_id
     LIMIT quantity;
 
     COMMIT;
