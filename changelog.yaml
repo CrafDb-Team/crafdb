@@ -1,6 +1,4 @@
 databaseChangeLog:
-  - include:
-      file: sql/functions.sql
    - include:
        file: sql/order-items.sql
    - include:
