@@ -1,0 +1,38 @@
+name: Create/Update Env in S3
+
+on:
+  workflow_call:
+    inputs:
+      DB_INSTANCE_NAME:
+        description: 'DB Instance Name'
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: Create ENV File
+    runs-on: ubuntu-latest
+    environment: Development
+
+    steps:
+    - name: checkout-repository
+      uses: actions/checkout@v4
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    
+    - name: Fetch AWS RDS Enpoint address
+      run: |
+        echo "Fetching AWS RDS Enpoint address"
+        echo "DB_URL=$(aws rds describe-db-instances --db-instance-identifier ${{ vars.DB_INSTANCE_NAME }} --query 'DBInstances[0].Endpoint.Address' --output text):$(aws rds describe-db-instances --db-instance-identifier ${{ vars.DB_INSTANCE_NAME }} --query 'DBInstances[0].Endpoint.Port' --output text)" >> $GITHUB_ENV
+    
+    - name: Create/Update liquibase config file in S3
+      run: |
+        echo "Creating liquibase config file in S3"
+        echo -e 'CHANGELOG_FILE="changelog.yaml"
+        DB_URL="${{ env.DB_URL }}"
+        DB_USERNAME="${{ secrets.DB_USERNAME }}"
+        DB_PASSWORD="${{ secrets.DB_PASSWORD }}"' |  aws s3 cp - ${{ secrets.BUCKET_OBJ_URL }}
