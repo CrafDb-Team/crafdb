@@ -7,9 +7,10 @@ on:
         type: string
         description: 'Terraform Apply Branch'
         required: true
-
-env:
-  WORKING_DIRECTORY: ./terraform
+      DB_INSTANCE_NAME:
+        type: string
+        description: 'DB Instance Name'
+        required: true
 
 permissions:
   contents: read
@@ -19,6 +20,8 @@ jobs:
   terraform_apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
+    env:
+      WORKING_DIRECTORY: ./terraform
 
     steps:
       - name: Checkout Repository
@@ -51,20 +54,22 @@ jobs:
         id: plan
         run: |
           echo "## Terraform Plan" >> $GITHUB_STEP_SUMMARY
-          make tf_plan >> $GITHUB_STEP_SUMMARY
+          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan>> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: apply
         run: |
           echo "## Terraform Apply" >> $GITHUB_STEP_SUMMARY
-          make tf_apply >> $GITHUB_STEP_SUMMARY
+          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_apply >> $GITHUB_STEP_SUMMARY
 
   setup_database_env_file:
     name: Dev CI
     needs: terraform_apply
     uses: ./.github/workflows/create-liquibase-remote-config.yml
     secrets: inherit
+    with:
+      DB_INSTANCE_NAME: ${{inputs.DB_INSTANCE_NAME}}
 
   database_setup:
     name: Check and Setup Database

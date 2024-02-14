@@ -1,13 +1,13 @@
 resource "aws_db_instance" "postgres-dev" {
   allocated_storage = 20 # Minimum as far as I can tell ()
 
-  identifier_prefix = "craft-beer-db-"
-  db_name           = "craft_beer_db"
-  engine            = "postgres"
-  engine_version    = var.postgres_version # Latest version of PostgreSQL available on AWS RDS (as of 2024-02-06)
-  instance_class    = "db.t3.micro"
-  username          = var.username
-  password          = var.password
+  identifier     = var.rds_instance_identifier
+  db_name        = "craft_beer_db"
+  engine         = "postgres"
+  engine_version = var.postgres_version # Latest version of PostgreSQL available on AWS RDS (as of 2024-02-06)
+  instance_class = "db.t3.micro"
+  username       = var.username
+  password       = var.password
   #   parameter_group_name = "default.mysql5.7"  #TODO: Investigate if this is necessary
   skip_final_snapshot = true
   publicly_accessible = true
