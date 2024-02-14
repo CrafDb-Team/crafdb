@@ -27,7 +27,7 @@ jobs:
     - name: Fetch AWS RDS Enpoint address
       run: |
         echo "Fetching AWS RDS Enpoint address"
-        DB_URL=$(aws rds describe-db-instances --db-instance-identifier ${{ vars.DB_INSTANCE_NAME }} --query 'DBInstances[0].Endpoint.Address' --output text):$(aws rds describe-db-instances --db-instance-identifier ${{ vars.DB_INSTANCE_NAME }} --query 'DBInstances[0].Endpoint.Port' --output text)"
+        DB_URL=$(aws rds describe-db-instances --db-instance-identifier ${{ vars.DB_INSTANCE_NAME }} --query 'DBInstances[0].Endpoint.Address' --output text):$(aws rds describe-db-instances --db-instance-identifier ${{ vars.DB_INSTANCE_NAME }} --query 'DBInstances[0].Endpoint.Port' --output text)
         echo "::add-mask::$DB_URL" 
         echo "DB_URL=$DB_URL" >> $GITHUB_ENV
 
