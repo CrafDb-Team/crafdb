@@ -143,4 +143,4 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE dev_temp"
+          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE dev_temp"
