@@ -1,0 +1,52 @@
+name: Development Database CI/CD
+
+on:
+  push:
+    branches: [ dev ]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  ci-workflow:
+    name: Dev CI
+    uses: ./.github/workflows/dev-db-ci.yml
+    secrets: inherit
+
+  migrate_dev_db:
+    name: Migrate Dev DB
+    needs: ci-workflow
+    runs-on: ubuntu-latest
+    environment: Development
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Liquibase
+        run: |
+          curl -L https://github.com/liquibase/liquibase/releases/download/v${LB_VERSION}/liquibase-${LB_VERSION}.zip --output liquibase.zip
+          unzip -o -d liquibase liquibase.zip
+        env:
+          LB_VERSION: ${{ vars.LIQUIBASE_VERSION }}
+
+      - name: Retrieve Env File
+        run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
+
+      - name: Create Liquibase Properties
+        run: |
+          export $(cat .env | xargs)
+          echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
+          echo "url: jdbc:postgresql://${DB_URL}/dev" >> liquibase.properties
+          echo "username:" $DB_USERNAME >> liquibase.properties
+          echo "password:" $DB_PASSWORD >> liquibase.properties
+
+      - name: Migrate Database to RDS
+        run: ./liquibase/liquibase update --rollback-on-error=true

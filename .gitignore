@@ -1,0 +1,12 @@
+# Terraform States
+terraform/.terraform/*
+
+*.lock.hcl
+
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
+# Enviroment Files
+*.env
+liquibase.properties
+liquibase-keyring.gpg
