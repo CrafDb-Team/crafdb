@@ -1,5 +1,5 @@
 databaseChangeLog:
-   - include:
+    - include:
        file: sql/order-items.sql
     - include:
        file: sql/batch.sql
@@ -9,5 +9,7 @@ databaseChangeLog:
        file: sql/customer.sql
     - include:
        file: sql/beer.sql
+    - include:
+       file: sql/order.sql       
     - include:
        file: sql/references.sql
