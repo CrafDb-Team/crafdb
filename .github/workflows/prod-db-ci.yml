@@ -13,8 +13,6 @@ jobs:
   terraform_test_workflow: 
     name: Terraform Test
     uses: ./.github/workflows/terraform_tests.yml
-    with:
-      DB_INSTANCE_NAME: ${{vars.DB_INSTANCE_NAME}}
     secrets: inherit
     
   database_setup_workflow: 
@@ -23,7 +21,6 @@ jobs:
     uses: ./.github/workflows/database_setup.yml
     with:
       TERRAFORM_APPLY_BRANCH: dev
-      DB_INSTANCE_NAME: ${{vars.DB_INSTANCE_NAME}}
     secrets: inherit
 
   test_empty_db:
@@ -63,8 +60,8 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS empty_temp"
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE empty_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS empty_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE empty_temp"
 
       - name: Create Liquibase Properties
         run: |
@@ -81,7 +78,7 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE empty_temp"
+          psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE empty_temp"
 
   test_prod_db:
     name: Test Dev Replica DB Migration
@@ -122,9 +119,9 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS prod_temp"
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE prod_temp"
-          pg_dump "postgresql://$DB_USERNAME@$DB_URL/craft_beer_db" > dump.sql
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE IF EXISTS prod_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE prod_temp"
+          pg_dump "postgresql://$DB_USERNAME@$DB_URL/prod" > dump.sql
           psql "postgresql://$DB_USERNAME@$DB_URL/prod_temp" -f dump.sql
           
       - name: Create Liquibase Properties
@@ -142,4 +139,4 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE prod_temp"
+          psql -d "postgresql://$DB_USERNAME@$DB_URL" -c "DROP DATABASE prod_temp"

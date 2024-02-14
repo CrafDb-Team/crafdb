@@ -22,15 +22,13 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v3
       - name: Assume the deploy pipeline user role
         uses: aws-actions/configure-aws-credentials@v4.0.1
         with:
           role-to-assume: ${{secrets.AWS_ASSUME_ROLE}}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{secrets.AWS_REGION }}
-
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: init
@@ -40,9 +38,13 @@ jobs:
       - name: Terraform Validate
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: validate
-        run: make tf_validate
+        run: |
+          echo "## Terraform Validate" >> $GITHUB_STEP_SUMMARY
+          make tf_validate  >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: plan
-        run: make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan
+        run: |
+          echo "## Terraform Plan" >> $GITHUB_STEP_SUMMARY
+          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan >> $GITHUB_STEP_SUMMARY

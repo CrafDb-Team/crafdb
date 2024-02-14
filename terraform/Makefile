@@ -27,7 +27,7 @@ tf_plan:
 
 .PHONY tf_apply:
 tf_apply:
-	terraform apply -auto-approve -var-file=$(ENV_VARS_DIR)/$(ENV).tfvars -var="username=$(DB_USER)" -var="password=$(DB_PW)" -var="rds_instance_identifier=$(DB_ID)"
+	terraform apply -var-file=$(ENV_VARS_DIR)/$(ENV).tfvars -var="username=$(DB_USER)" -var="password=$(DB_PW)" -var="rds_instance_identifier=$(DB_ID)"
 
 ## Speculative destroy (Wont destroy anything, just show what will be destroyed)
 .PHONY tf_spec_destroy:

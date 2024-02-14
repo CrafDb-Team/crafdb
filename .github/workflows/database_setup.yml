@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: ${{ inputs.TERRAFORM_APPLY_BRANCH }}
 
@@ -38,19 +38,30 @@ jobs:
 
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: make tf_init
+        id: init
+        run: |
+          make tf_init
 
       - name: Terraform Validate
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: make tf_validate
+        id: validate
+        run: |
+          echo "## Terraform Validate" >> $GITHUB_STEP_SUMMARY
+          make tf_validate >> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan
+        id: plan
+        run: |
+          echo "## Terraform Plan" >> $GITHUB_STEP_SUMMARY
+          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan>> $GITHUB_STEP_SUMMARY
 
       - name: Terraform Apply
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_apply
+        id: apply
+        run: |
+          echo "## Terraform Apply" >> $GITHUB_STEP_SUMMARY
+          make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_apply >> $GITHUB_STEP_SUMMARY
 
   setup_database_env_file:
     name: Dev CI
@@ -67,7 +78,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: ${{ inputs.TERRAFORM_APPLY_BRANCH }}
 
@@ -91,5 +102,5 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -tc "SELECT 1 FROM pg_database WHERE datname = 'dev'" | grep -q 1 || psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE dev"
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -tc "SELECT 1 FROM pg_database WHERE datname = 'craft_beer_db'" | grep -q 1 || psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE craft_beer_db"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE IF NOT EXISTS dev"
+          psql "postgresql://$DB_USERNAME@$DB_URL" -c "CREATE DATABASE IF NOT EXISTS prod"
