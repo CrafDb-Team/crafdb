@@ -23,12 +23,14 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
       - name: Assume the deploy pipeline user role
         uses: aws-actions/configure-aws-credentials@v4.0.1
         with:
           role-to-assume: ${{secrets.AWS_ASSUME_ROLE}}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{secrets.AWS_REGION }}
+          
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
         id: init

@@ -38,23 +38,19 @@ jobs:
 
       - name: Terraform Init
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        id: init
         run: make tf_init
 
       - name: Terraform Validate
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        id: validate
         run: make tf_validate
 
       - name: Terraform Plan
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        id: plan
         run: make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_plan
 
       - name: Terraform Apply
         working-directory: ${{ env.WORKING_DIRECTORY }}
-        id: apply
-        run: make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_apply
+        run: make DB_USER=${{secrets.DB_USERNAME}} DB_PW=${{secrets.DB_PASSWORD}} DB_ID=${{inputs.DB_INSTANCE_NAME}} tf_apply -auto-approve
 
   setup_database_env_file:
     name: Dev CI
