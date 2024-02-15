@@ -35,8 +35,8 @@ FROM "viewOrderItemInfo"
         SELECT "Order"."OrderID", "Name" AS "CustomerName"
         FROM "Order" JOIN "Customer" ON "Order"."CustomerID" = "Customer"."CustomerID"
     ) AS selectTable ON "viewOrderItemInfo"."OrderID" = selectTable."OrderID"
-GROUP BY "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "OrderState"
-ORDER BY "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "OrderState";
+GROUP BY "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "BeerType", "OrderState"
+ORDER BY "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "BeerType", "OrderState";
 -- rollback DROP VIEW "viewOrderSummaries"
 
 -- changeset rtrickett:stock-on-hand-view runOnChange:true
@@ -44,5 +44,6 @@ CREATE OR REPLACE VIEW "viewStockOnHand" AS
 SELECT "BeerName", "BeerType", "ExpiryDate", COUNT(*) AS "Quantity"
 FROM "viewKegInfo" LEFT JOIN "viewOrderItemInfo" ON "viewKegInfo"."KegID" = "viewOrderItemInfo"."KegID"
 WHERE "ExpiryDate" > CURRENT_DATE AND ("OrderState" = 'Returned with Defect' OR "viewOrderItemInfo"."KegID" IS NULL)
-GROUP BY "BeerName", "ExpiryDate";
+GROUP BY "BeerName", "BeerType", "ExpiryDate"
+ORDER BY "BeerName", "BeerType", "ExpiryDate";
 -- rollback DROP VIEW "viewStockOnHand"
