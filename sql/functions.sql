@@ -16,7 +16,8 @@ BEGIN
     INNER JOIN "KEG" kg on bt."BatchID" = kg."BatchID"
     LEFT JOIN "OrderItem" oi on kg."KegID" = oi."KegID"
     WHERE bt."BeerID" = beer_id
-    AND oi."OrderID" IS NULL;
+    AND oi."OrderID" IS NULL
+    OR oi."OrderItemStateID" NOT IN (1, 2, 3, 4);
 
     RETURN remaining_kegs_of_beer;
 END;
@@ -26,7 +27,7 @@ END;
 
 
 --changeset emokoena:func-beer-name-to-id runOnChange:true
-CREATE OR REPLACE FUNCTION "funcBeerNameToID"(beer_name varchar)
+CREATE OR REPLACE FUNCTION "funcBeerNameToID"(beer_name varchar, beer_type varchar)
 RETURNS integer
 LANGUAGE plpgsql
 AS
@@ -37,7 +38,9 @@ BEGIN
     SELECT br."BeerId"
     INTO beer_id
     FROM "Beer" br
-    WHERE br."BeerName" = beer_name;
+    LEFT JOIN "BeerType" bt ON br."BeerTypeID" = bt."BeerTypeID"
+    WHERE br."BeerName" = beer_name
+    AND bt."BeerType" = beer_type;
 
 EXCEPTION
     WHEN no_data_found THEN
