@@ -1,15 +1,23 @@
 -- liquibase formatted sql
 
 -- changeset ljordaan:table-orderitemstate-insertion
-INSERT INTO "OrderItemState" ("OrderItemStateID", "OrderState")
+INSERT INTO 'OrderItemState' ('OrderState')
 VALUES 
-    (1, 'Ordered'), 
-    (2, 'Shipped'), 
-    (3, 'Delivered'), 
-    (4, 'Returned with Defect'), 
-    (5, 'Returned without Defect'), 
-    (6, 'Canceled');
--- rollback DELETE FROM TABLE "OrderItemState"; 
+    ('Ordered'), 
+    ('Shipped'), 
+    ('Delivered'), 
+    ('Returned with Defect'), 
+    ('Returned without Defect'), 
+    ('Canceled');
+-- rollback DELETE FROM TABLE "OrderItemState";
+
+-- changeset ljordaan:table-beertype-insertion
+INSERT INTO 'BeerType' ('BeerType') 
+VALUES 
+    ('Lager'),
+    ('Pale Ale'),
+    ('Pilsner');
+-- rollback DELETE FROM TABLE "BeerType";
 
 -- changeset lbradford:table-customer-insertion
 INSERT INTO 'Customer' ('CustomerID', 'Name', 'Email', 'ContactNumber') VALUES 
