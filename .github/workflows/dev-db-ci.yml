@@ -64,14 +64,14 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS empty_temp_${{ github.sha }}"
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE empty_temp_${{ github.sha }}"
+          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS empty_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE empty_temp"
 
       - name: Create Liquibase Properties
         run: |
           export $(cat .env | xargs)
           echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
-          echo "url: jdbc:postgresql://${DB_URL}/empty_temp_${{ github.sha }}" >> liquibase.properties
+          echo "url: jdbc:postgresql://${DB_URL}/empty_temp" >> liquibase.properties
           echo "username:" $DB_USERNAME >> liquibase.properties
           echo "password:" $DB_PASSWORD >> liquibase.properties
 
@@ -82,7 +82,7 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE empty_temp_${{ github.sha }}"
+          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE empty_temp"
 
   test_prod_db:
     name: Test Dev Replica DB Migration
@@ -123,16 +123,16 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS dev_temp_${{ github.sha }}"
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE dev_temp_${{ github.sha }}"
+          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS dev_temp"
+          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE dev_temp"
           pg_dump "postgresql://$DB_USERNAME@$DB_URL/dev" > dump.sql
-          psql "postgresql://$DB_USERNAME@$DB_URL/dev_temp_${{ github.sha }}" -f dump.sql
+          psql "postgresql://$DB_USERNAME@$DB_URL/dev_temp" -f dump.sql
           
       - name: Create Liquibase Properties
         run: |
           export $(cat .env | xargs)
           echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
-          echo "url: jdbc:postgresql://${DB_URL}/dev_temp_${{ github.sha }}" >> liquibase.properties
+          echo "url: jdbc:postgresql://${DB_URL}/dev_temp" >> liquibase.properties
           echo "username:" $DB_USERNAME >> liquibase.properties
           echo "password:" $DB_PASSWORD >> liquibase.properties
 
@@ -143,4 +143,4 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE dev_temp_${{ github.sha }}"
+          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE dev_temp"

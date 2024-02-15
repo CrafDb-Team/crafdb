@@ -28,20 +28,20 @@ FROM "Keg" JOIN "viewBatchInfo" ON "Keg"."BatchID" = "viewBatchInfo"."BatchID";
 
 -- changeset rtrickett:order-summaries-view runOnChange:true
 CREATE OR REPLACE VIEW "viewOrderSummaries" AS
-SELECT "viewOrderItemInfo"."OrderID", "CustomerName", COUNT(*) AS "Quantity"
+SELECT "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "OrderState", COUNT(*) AS "Quantity"
 FROM "viewOrderItemInfo" 
     JOIN "viewKegInfo" ON "viewOrderItemInfo"."KegID" = "viewKegInfo"."KegID"
     JOIN (
-        SELECT "OrderID", "Name" AS "CustomerName"
+        SELECT "Order"."OrderID", "Name" AS "CustomerName"
         FROM "Order" JOIN "Customer" ON "Order"."CustomerID" = "Customer"."CustomerID"
     ) AS selectTable ON "viewOrderItemInfo"."OrderID" = selectTable."OrderID"
-GROUP BY "OrderID", "BeerName", "OrderStatus";
+GROUP BY "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "OrderState";
 -- rollback DROP VIEW "viewOrderSummaries"
 
 -- changeset rtrickett:stock-on-hand-view runOnChange:true
 CREATE OR REPLACE VIEW "viewStockOnHand" AS
-SELECT "BeerName", "ExpiryDate" COUNT(*) AS "Quantity"
+SELECT "BeerName", "ExpiryDate", COUNT(*) AS "Quantity"
 FROM "viewKegInfo" LEFT JOIN "viewOrderItemInfo" ON "viewKegInfo"."KegID" = "viewOrderItemInfo"."KegID"
-WHERE "ExpiryDate" > CURRENT_DATE AND ("OrderState" = "Returned with Defect" OR "viewOrderItemInfo"."KegID" IS NULL)
+WHERE "ExpiryDate" > CURRENT_DATE AND ("OrderState" = 'Returned with Defect' OR "viewOrderItemInfo"."KegID" IS NULL)
 GROUP BY "BeerName", "ExpiryDate";
 -- rollback DROP VIEW "viewStockOnHand"
