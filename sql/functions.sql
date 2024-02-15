@@ -25,7 +25,7 @@ END;
 -- rollback DROP FUNCTION IF EXISTS "funcCountUnsoldKegsOfBeer"(integer);
 
 
---changeset emokoena: func-beer-name-to-id runOnChange:true
+--changeset emokoena:func-beer-name-to-id runOnChange:true
 CREATE OR REPLACE FUNCTION "funcBeerNameToID"(beer_name varchar)
 RETURNS integer
 LANGUAGE plpgsql
