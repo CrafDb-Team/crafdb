@@ -41,8 +41,9 @@ BEGIN
 
     RETURN beer_id;
 
-EXCEPTION no_data_found THEN
-    RAISE EXCEPTION \'No beer with name % found\', beer_name
+EXCEPTION
+    WHEN no_data_found THEN
+        RAISE EXCEPTION \'No beer with name % found\', beer_name
 
 END;
 ';
