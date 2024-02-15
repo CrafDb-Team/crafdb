@@ -59,7 +59,7 @@ VALUES
 -- rollback DELETE FROM TABLE "BeerType";
 
 -- changeset ljordaan:table-beer-insertion
-INSERT INTO "Beer" ("BeerName", "BeerDescription", "BeerTypeID", "PricePerKeg") 
+INSERT INTO "Beer" ("BeerName", "BeerDesc", "BeerTypeID", "PricePerKeg") 
 VALUES 
 ('Red Horse', 'Crisp and hoppy with citrus notes', 1, 520.45);
 ('Allan-Larger', 'Rich and bitter with hints of caramel', 1, 595.79);
