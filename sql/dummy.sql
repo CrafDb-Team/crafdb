@@ -39,3 +39,19 @@ INSERT INTO 'Order' ('OrderID', 'CustomerID', 'CreatedOn') VALUES
 (9, 8, '2023-11-02'),
 (10, 10, '2023-04-29');
 -- rollback DELETE FROM TABLE "Order";
+
+
+-- changeset lbradford:table-orderitem-insertion
+INSERT INTO 'OrderItem' ('OrderID', 'KegID', 'OrderItemStateID', 'PriceAtSale')
+VALUES 
+(1, 1, 1, 328.6),
+(2, 2, 2, 362.65),
+(2, 3, 2, 362.65),
+(3, 4, 1, 433.42),
+(4, 5, 2, 962.72),
+(5, 6, 4, 796.57),
+(6, 7, 6, 444.65),
+(7, 8, 6, 853.99),
+(8, 9, 2, 811.18),
+(9, 10, 2, 212.9);
+-- rollback DELETE FROM TABLE "OrderItem";
