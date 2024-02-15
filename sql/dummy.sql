@@ -12,7 +12,7 @@ INSERT INTO "Customer" ("CustomerID", "Name", "Email", "ContactNumber") VALUES
 (8, 'Voonte', 'vdyett7@omniture.com', '+27 659 477 5898'),
 (9, 'Livetube', 'tconnachan8@ucla.edu', '+27 937 829 9865'),
 (10, 'Kaymbo', 'geades9@naver.com', '+27 575 798 1979');
--- rollback DELETE FROM TABLE "Customer";
+-- rollback DELETE FROM "Customer"
 
 -- changeset lbradford:table-order-insertion
 INSERT INTO "Order" ("OrderID", "CustomerID", "CreatedOn") VALUES 
@@ -26,7 +26,7 @@ INSERT INTO "Order" ("OrderID", "CustomerID", "CreatedOn") VALUES
 (8, 8, '2023-11-10'),
 (9, 8, '2023-11-02'),
 (10, 10, '2023-04-29');
--- rollback DELETE FROM TABLE "Order";
+-- rollback DELETE FROM "Order"
 
 -- changeset ljordaan:table-orderitemstate-insertion
 INSERT INTO "OrderItemState" ("OrderState")
@@ -37,7 +37,7 @@ VALUES
     ('Returned with Defect'), 
     ('Returned without Defect'), 
     ('Canceled');
--- rollback DELETE FROM TABLE "OrderItemState";
+-- rollback DELETE FROM "OrderItemState"
 
 -- changeset ljordaan:table-batchstatus-insertion
 INSERT INTO "BatchStatus" ("BatchStatus") 
@@ -48,7 +48,7 @@ VALUES
 ('Fermenting'),
 ('Ready'),
 ('Kegged');
--- rollback DELETE FROM TABLE "BatchStatus";
+-- rollback DELETE FROM "BatchStatus"
 
 -- changeset ljordaan:table-beertype-insertion
 INSERT INTO "BeerType" ("BeerType") 
@@ -56,7 +56,7 @@ VALUES
     ('Lager'),
     ('Pale Ale'),
     ('Pilsner');
--- rollback DELETE FROM TABLE "BeerType";
+-- rollback DELETE FROM "BeerType"
 
 -- changeset ljordaan:table-beer-insertion
 INSERT INTO "Beer" ("BeerName", "BeerDesc", "BeerTypeID", "PricePerKeg") 
@@ -80,7 +80,7 @@ INSERT INTO "Batch" ("BeerID", "BatchStatusID") VALUES
 (1, 5),
 (5, 6),
 (4, 4);
-
+-- rollback DELETE FROM "Batch"
 
 
 
@@ -97,7 +97,7 @@ INSERT INTO "Keg" ("BatchID", "ExpiryDate") VALUES
 (7, '2024-08-25'),
 (8, '2024-11-19'),
 (8, '2024-11-25');
--- rollback DELETE FROM TABLE "Keg";
+-- rollback DELETE FROM "Keg"
 
 -- changeset lbradford:table-orderitem-insertion
 INSERT INTO "OrderItem" ("OrderID", "KegID", "OrderItemStateID", "PriceAtSale")
@@ -112,4 +112,4 @@ VALUES
 (7, 8, 6, 853.99),
 (8, 9, 2, 811.18),
 (9, 10, 2, 212.9);
--- rollback DELETE FROM TABLE OrderItem
+-- rollback DELETE FROM "OrderItem"
