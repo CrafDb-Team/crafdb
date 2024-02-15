@@ -22,7 +22,7 @@ FROM "OrderItem" JOIN "OrderItemState" ON "OrderItem"."OrderItemStateID" = "Orde
 
 -- changeset rtrickett:keg-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewKegInfo" AS
-SELECT "KegID", "BatchID", "BeerName", "ExpiryDate"
+SELECT "KegID", "Keg"."BatchID", "BeerName", "ExpiryDate"
 FROM "Keg" JOIN "viewBatchInfo" ON "Keg"."BatchID" = "viewBatchInfo"."BatchID";
 -- rollback DROP VIEW "viewKegInfo"
 
