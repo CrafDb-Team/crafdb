@@ -20,8 +20,8 @@ BEGIN
     INNER JOIN Beer br on br.BeerID = kg.BeerID
     WHERE NOT EXISTS (
         SELECT 
-            KegID, 
-            OrderItemStateID 
+            oi.KegID, 
+            oi.OrderItemStateID 
         FROM OrderItem oi 
         WHERE oi.KegID = kg.KegID
         AND oi.OrderItemStateID IN (0, 1, 2, 3)
