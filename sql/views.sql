@@ -16,7 +16,7 @@ FROM "Batch"
 
 -- changeset rtrickett:order-item-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewOrderItemInfo" AS 
-SELECT "ItemID", "OrderID", "KegID", "OrderState", "PriceAtSale"
+SELECT "OrderItemID", "OrderID", "KegID", "OrderState", "PriceAtSale"
 FROM "OrderItem" JOIN "OrderItemState" ON "OrderItem"."OrderItemStateID" = "OrderItemState"."OrderItemStateID";
 -- rollback DROP VIEW "viewOrderItemInfo"
 
