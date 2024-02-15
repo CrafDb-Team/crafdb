@@ -59,6 +59,16 @@ VALUES
     ('Pilsner');
 -- rollback DELETE FROM TABLE "BeerType";
 
+INSERT INTO 'Batch' ('BeerID', 'BatchStatusID') VALUES 
+(2, 5),
+(3, 5),
+(5, 6),
+(4, 1),
+(6, 1),
+(1, 5),
+(5, 6),
+(4, 4);
+
 -- changeset lbradford:table-customer-insertion
 INSERT INTO 'Customer' ('CustomerID', 'Name', 'Email', 'ContactNumber') VALUES 
 (1, 'Buzzbean', 'dvasyukhnov0@devhub.com', '+352 596 515 9541'),
