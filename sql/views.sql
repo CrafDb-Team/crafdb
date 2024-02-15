@@ -26,8 +26,8 @@ SELECT "KegID", "BatchID", "BeerName", "ExpiryDate"
 FROM "Keg" ON "viewBatchInfo" ON "Keg"."BatchID" = "viewBatchInfo"."BatchID";
 -- rollback DROP VIEW "viewKegInfo"
 
--- changelog rtrickett:order-summary-view runOnChange:true
-CREATE OR REPLACE VIEW "viewOrderSummary" AS
+-- changelog rtrickett:order-summaries-view runOnChange:true
+CREATE OR REPLACE VIEW "viewOrderSummaries" AS
 SELECT "OrderID", "Name", COUNT(*) AS "Quantity"
 FROM "viewOrderItemInfo" 
     JOIN "viewKegInfo" ON "viewOrderItemInfo"."KegID" = "viewKegInfo"."KegID"
@@ -36,7 +36,7 @@ FROM "viewOrderItemInfo"
         FROM "Order" JOIN "Customer" ON "Order"."CustomerID" = "Customer"."CustomerID"
     ) AS selectTable ON "viewOrderItemInfo"."OrderID" = selectTable."OrderID"
 GROUP BY "OrderID", "BeerName", "OrderStatus";
--- rollback DROP VIEW "viewOrderSummary"
+-- rollback DROP VIEW "viewOrderSummaries"
 
 -- changeset rtrickett:stock-on-hand-view runOnChange:true
 CREATE OR REPLACE VIEW "viewStockOnHand" AS
