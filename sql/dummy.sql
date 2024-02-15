@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 
 -- changeset ljordaan:table-orderitemstate-insertion
-INSERT INTO "OrderItemState" ("OrderItemStateID", "OrderState")
+INSERT INTO 'OrderItemState' ('OrderItemStateID', 'OrderState')
 VALUES 
     (1, 'Ordered'), 
     (2, 'Shipped'), 
@@ -12,7 +12,7 @@ VALUES
 -- rollback DELETE FROM TABLE "OrderItemState";
 
 -- changeset ljordaan:table-beertype-insertion
-INSERT INTO "BeerType" ("BeerTypeID", "BeerType") 
+INSERT INTO 'BeerType' ('BeerTypeID', 'BeerType') 
 VALUES 
     (1, 'Stout'),
     (2, 'Lager'),
