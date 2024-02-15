@@ -1,12 +1,12 @@
 -- liquibase formatted sql
 
--- changelog rtrickett:beer-view runOnChange:true
+-- changelog rtrickett:beer-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewBeerInfo" AS
 SELECT "BeerID", "BeerName", "BeerDesc", "BeerType", "PricePerKeg"
 FROM "Beer" JOIN "BeerType" ON "Beer.BeerTypeID" = "BeerType"."BeerTypeID";
 -- rollback DROP VIEW "viewBeerInfo"
 
--- changelog rtrickett:batch-view runOnChange:true
+-- changelog rtrickett:batch-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewBatchInfo" AS
 SELECT "BatchID", "BeerName", "BatchStatus"
 FROM "Batch" 
@@ -14,7 +14,7 @@ FROM "Batch"
     JOIN "Beer" ON "Batch"."BeerID" = "Beer"."BeerID";
 -- rollback DROP VIEW "viewBatchInfo"
 
--- changelog rtrickett:order-item-view runOnChange:true
+-- changelog rtrickett:order-item-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewOrderItemInfo" AS 
 SELECT "ItemID", "OrderID", "KegID", "OrderState", "PriceAtSale"
 FROM "OrderItem" JOIN "OrderItemState" ON "OrderItem"."OrderItemStateID" = "OrderItemState"."OrderItemStateID";
