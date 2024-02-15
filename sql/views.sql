@@ -1,12 +1,12 @@
 -- liquibase formatted sql
 
--- changelog rtrickett:beer-info-view runOnChange:true
+-- changeset rtrickett:beer-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewBeerInfo" AS
 SELECT "BeerID", "BeerName", "BeerDesc", "BeerType", "PricePerKeg"
 FROM "Beer" JOIN "BeerType" ON "Beer.BeerTypeID" = "BeerType"."BeerTypeID";
 -- rollback DROP VIEW "viewBeerInfo"
 
--- changelog rtrickett:batch-info-view runOnChange:true
+-- changeset rtrickett:batch-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewBatchInfo" AS
 SELECT "BatchID", "BeerName", "BatchStatus"
 FROM "Batch" 
@@ -14,19 +14,19 @@ FROM "Batch"
     JOIN "Beer" ON "Batch"."BeerID" = "Beer"."BeerID";
 -- rollback DROP VIEW "viewBatchInfo"
 
--- changelog rtrickett:order-item-info-view runOnChange:true
+-- changeset rtrickett:order-item-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewOrderItemInfo" AS 
 SELECT "ItemID", "OrderID", "KegID", "OrderState", "PriceAtSale"
 FROM "OrderItem" JOIN "OrderItemState" ON "OrderItem"."OrderItemStateID" = "OrderItemState"."OrderItemStateID";
 -- rollback DROP VIEW "viewOrderItemInfo"
 
--- changelog rtrickett:keg-info-view runOnChange:true
+-- changeset rtrickett:keg-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewKegInfo" AS
 SELECT "KegID", "BatchID", "BeerName", "ExpiryDate"
 FROM "Keg" ON "viewBatchInfo" ON "Keg"."BatchID" = "viewBatchInfo"."BatchID";
 -- rollback DROP VIEW "viewKegInfo"
 
--- changelog rtrickett:order-summaries-view runOnChange:true
+-- changeset rtrickett:order-summaries-view runOnChange:true
 CREATE OR REPLACE VIEW "viewOrderSummaries" AS
 SELECT "OrderID", "Name", COUNT(*) AS "Quantity"
 FROM "viewOrderItemInfo" 
