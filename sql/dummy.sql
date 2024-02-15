@@ -55,7 +55,7 @@ INSERT INTO "BeerType" ("BeerType")
 VALUES 
     ('Lager'),
     ('Pale Ale'),
-    ('Pilsner'),
+    ('Pilsner');
 -- rollback DELETE FROM TABLE "BeerType";
 
 -- changeset ljordaan:table-beer-insertion
