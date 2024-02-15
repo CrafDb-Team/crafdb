@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset emokoena:proc-create-order-items-for-customer-order
+--changeset emokoena:proc-create-order-items-for-customer-order runOnChange:true
 CREATE OR REPLACE PROCEDURE ProcCreateOderItemsForCustomerOrder(
    beer_id integer,  
    order_id integer,
