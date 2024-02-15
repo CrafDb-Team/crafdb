@@ -67,7 +67,7 @@ VALUES
 ('Allan-Larger', 'Light and refreshing with a fruity aroma', 2, 751.86),
 ('Red Horse', 'Bold and bitter with a piney taste', 3, 658.01),
 ('Allan-Larger', 'Spicy and complex with a hint of cloves', 3, 779.59);
--- rollback DELETE FROM TABLE "Beer";
+-- rollback DELETE FROM "Beer";
 
 
 -- changeset lbradford:table-batch-insertion
