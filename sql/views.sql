@@ -28,7 +28,7 @@ FROM "Keg" JOIN "viewBatchInfo" ON "Keg"."BatchID" = "viewBatchInfo"."BatchID";
 
 -- changeset rtrickett:order-summaries-view runOnChange:true
 CREATE OR REPLACE VIEW "viewOrderSummaries" AS
-SELECT "OrderID", "Name", COUNT(*) AS "Quantity"
+SELECT "viewOrderItemInfo"."OrderID", "Name", COUNT(*) AS "Quantity"
 FROM "viewOrderItemInfo" 
     JOIN "viewKegInfo" ON "viewOrderItemInfo"."KegID" = "viewKegInfo"."KegID"
     JOIN (
@@ -40,7 +40,8 @@ GROUP BY "OrderID", "BeerName", "OrderStatus";
 
 -- changeset rtrickett:stock-on-hand-view runOnChange:true
 CREATE OR REPLACE VIEW "viewStockOnHand" AS
-SELECT "BeerName", COUNT(*) AS "Quantity"
+SELECT "BeerName", "ExpiryDate" COUNT(*) AS "Quantity"
 FROM "viewKegInfo" LEFT JOIN "viewOrderItemInfo" ON "viewKegInfo"."KegID" = "viewOrderItemInfo"."KegID"
-WHERE "ExpiryDate" > CURRENT_DATE AND ("OrderState" = "Returned with Defect" OR "viewOrderItemInfo"."KegID" IS NULL);
+WHERE "ExpiryDate" > CURRENT_DATE AND ("OrderState" = "Returned with Defect" OR "viewOrderItemInfo"."KegID" IS NULL)
+GROUP BY "BeerName", "ExpiryDate";
 -- rollback DROP VIEW "viewStockOnHand"
