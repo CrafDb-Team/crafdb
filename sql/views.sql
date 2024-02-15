@@ -3,7 +3,7 @@
 -- changeset rtrickett:beer-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewBeerInfo" AS
 SELECT "BeerID", "BeerName", "BeerDesc", "BeerType", "PricePerKeg"
-FROM "Beer" JOIN "BeerType" ON "Beer.BeerTypeID" = "BeerType"."BeerTypeID";
+FROM "Beer" JOIN "BeerType" ON "Beer"."BeerTypeID" = "BeerType"."BeerTypeID";
 -- rollback DROP VIEW "viewBeerInfo"
 
 -- changeset rtrickett:batch-info-view runOnChange:true
