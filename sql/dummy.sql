@@ -86,7 +86,7 @@ INSERT INTO "Batch" ("BeerID", "BatchStatusID") VALUES
 
 -- changeset lbradford:table-keg-insertion
 INSERT INTO "Keg" ("BatchID", "ExpiryDate") VALUES 
-(1, '2023-07-06');
+(1, '2023-07-06'),
 (2, '2023-01-13'),
 (2, '2023-01-18'),
 (3, '2023-03-29'),
