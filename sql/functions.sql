@@ -23,3 +23,27 @@ END;
 ';
 
 -- rollback DROP FUNCTION IF EXISTS "funcCountUnsoldKegsOfBeer"(integer);
+
+
+--changeset emokoena: func-beer-name-to-id runOnChange:true
+CREATE OR REPLACE FUNCTION "funcBeerNameToID"(beer_name varchar)
+RETURNS integer
+LANGUAGE plpgsql
+AS
+'
+DECLARE
+    beer_id integer;
+BEGIN
+    SELECT br."BeerId"
+    INTO beer_id
+    FROM "Beer" br
+    WHERE br."BeerName" = beer_name;
+
+    RETURN beer_id;
+
+EXCEPTION no_data_found THEN
+    RAISE EXCEPTION \'No beer with name % found\', beer_name
+
+END;
+';
+-- rollback DROP FUNCTION IF EXISTS "funcBeerNameToID"(varchar);
