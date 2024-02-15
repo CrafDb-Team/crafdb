@@ -11,13 +11,14 @@ DECLARE
 BEGIN
     SELECT count(*) 
     INTO remaining_kegs_of_beer
-    FROM Beer br
-    INNER JOIN "Batch" bt on bt."BatchID" = br."BatchID"
-    INNER JOIN "KEG" kg on bt."BatchID" = kg."BatchID"
+    FROM "Beer" br
+    INNER JOIN "Batch" bt on bt."BeerID" = br."BeerID"
+    INNER JOIN "Keg" kg on bt."BatchID" = kg."BatchID"
     LEFT JOIN "OrderItem" oi on kg."KegID" = oi."KegID"
     WHERE bt."BeerID" = beer_id
-    AND oi."OrderID" IS NULL
-    OR oi."OrderItemStateID" NOT IN (1, 2, 3, 4);
+    AND "ExpiryDate" > CURRENT_DATE 
+	AND (oi."OrderID" IS NULL
+    OR oi."OrderItemStateID" NOT IN (1, 2, 3, 4));
 
     RETURN remaining_kegs_of_beer;
 END;
@@ -35,19 +36,14 @@ AS
 DECLARE
     beer_id integer;
 BEGIN
-    SELECT br."BeerId"
+    SELECT br."BeerID"
     INTO beer_id
     FROM "Beer" br
     LEFT JOIN "BeerType" bt ON br."BeerTypeID" = bt."BeerTypeID"
     WHERE br."BeerName" = beer_name
     AND bt."BeerType" = beer_type;
 
-EXCEPTION
-    WHEN no_data_found THEN
-        RAISE EXCEPTION ''No beer with name % found'', beer_name;
-
-RETURN beer_id;
-
+	RETURN beer_id;
 END;
 ';
 -- rollback DROP FUNCTION IF EXISTS "funcBeerNameToID"(varchar);
