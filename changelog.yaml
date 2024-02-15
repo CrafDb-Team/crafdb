@@ -2,8 +2,6 @@ databaseChangeLog:
    - include:
       file: sql/procedures.sql
    - include:
-      file: sql/functions.sql
-   - include:
       file: sql/order-items.sql
    - include:
       file: sql/batch.sql
