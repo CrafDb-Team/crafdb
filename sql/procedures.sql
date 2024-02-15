@@ -12,8 +12,8 @@ AS
 BEGIN
 
     IF quantity < 0 THEN
-        RAISE EXCEPTION \'Quantity % is invalid, value cannot be negative\', quantity
-    END IF
+        RAISE EXCEPTION ''Quantity % is invalid, value cannot be negative'', quantity;
+    END IF;
 
     INSERT INTO OrderItem("OrderID", "KegID", "OrderItemStateID", "PriceAtSale")
     SELECT 
