@@ -27,7 +27,7 @@ END;
 
 
 --changeset emokoena:func-beer-name-to-id runOnChange:true
-CREATE OR REPLACE FUNCTION "funcBeerNameToID"(beer_name varchar)
+CREATE OR REPLACE FUNCTION "funcBeerNameToID"(beer_name varchar, beer_type varchar)
 RETURNS integer
 LANGUAGE plpgsql
 AS
@@ -38,7 +38,9 @@ BEGIN
     SELECT br."BeerId"
     INTO beer_id
     FROM "Beer" br
-    WHERE br."BeerName" = beer_name;
+    LEFT JOIN "BeerType" bt ON br."BeerTypeID" = bt."BeerTypeID"
+    WHERE br."BeerName" = beer_name
+    AND bt."BeerType" = beer_type;
 
 EXCEPTION
     WHEN no_data_found THEN
