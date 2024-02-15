@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
---changeset emokoena:create-count-unsold-kegs-of-beer
-CREATE FUNCTION CountUnsoldKegsOfBeer(beer_id integer)
+--changeset emokoena:func-create-count-unsold-kegs-of-beer
+CREATE OR REPLACE FUNCTION FuncCountUnsoldKegsOfBeer(beer_id integer)
 RETURNS integer
 LANGUAGE plpgsql
 AS
@@ -21,4 +21,5 @@ BEGIN
     RETURN remaining_kegs_of_beer;
 END;
 ';
--- rollback DROP FUNCTION IF EXISTS CountUnsoldKegsOfBeer(integer);
+
+-- rollback DROP FUNCTION IF EXISTS FuncCountUnsoldKegsOfBeer(integer);
