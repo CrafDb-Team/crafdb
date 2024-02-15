@@ -19,3 +19,5 @@ databaseChangeLog:
       file: sql/procedures.sql
    - include:
       file: sql/dummy.sql
+   - include:
+      file: sql/functions.sql
