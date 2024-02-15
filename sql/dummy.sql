@@ -61,11 +61,11 @@ VALUES
 -- changeset ljordaan:table-beer-insertion
 INSERT INTO "Beer" ("BeerName", "BeerDesc", "BeerTypeID", "PricePerKeg") 
 VALUES 
-('Red Horse', 'Crisp and hoppy with citrus notes', 1, 520.45);
-('Allan-Larger', 'Rich and bitter with hints of caramel', 1, 595.79);
-('Red Horse', 'Smooth and creamy with a chocolatey finish', 2, 595.21);
-('Allan-Larger', 'Light and refreshing with a fruity aroma', 2, 751.86);
-('Red Horse', 'Bold and bitter with a piney taste', 3, 658.01);
+('Red Horse', 'Crisp and hoppy with citrus notes', 1, 520.45),
+('Allan-Larger', 'Rich and bitter with hints of caramel', 1, 595.79),
+('Red Horse', 'Smooth and creamy with a chocolatey finish', 2, 595.21),
+('Allan-Larger', 'Light and refreshing with a fruity aroma', 2, 751.86),
+('Red Horse', 'Bold and bitter with a piney taste', 3, 658.01),
 ('Allan-Larger', 'Spicy and complex with a hint of cloves', 3, 779.59);
 -- rollback DELETE FROM TABLE "Beer";
 
