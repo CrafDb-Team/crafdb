@@ -16,7 +16,8 @@ BEGIN
     INNER JOIN "KEG" kg on bt."BatchID" = kg."BatchID"
     LEFT JOIN "OrderItem" oi on kg."KegID" = oi."KegID"
     WHERE bt."BeerID" = beer_id
-    AND oi."OrderID" IS NULL;
+    AND oi."OrderID" IS NULL
+    OR oi."OrderItemStateID" NOT IN (1, 2, 3, 4);
 
     RETURN remaining_kegs_of_beer;
 END;
