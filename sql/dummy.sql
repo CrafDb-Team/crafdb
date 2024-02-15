@@ -1,3 +1,16 @@
+-- liquibase formatted sql
+
+-- changeset ljordaan:table-orderitemstate-insertion
+INSERT INTO "OrderItemState" ("OrderItemStateID", "OrderState")
+VALUES 
+    (1, 'Ordered'), 
+    (2, 'Shipped'), 
+    (3, 'Delivered'), 
+    (4, 'Returned with Defect'), 
+    (5, 'Returned without Defect'), 
+    (6, 'Canceled');
+-- rollback DELETE FROM TABLE "OrderItemState"; 
+
 -- changeset lbradford:table-customer-insertion
 INSERT INTO 'Customer' ('CustomerID', 'Name', 'Email', 'ContactNumber') VALUES 
 (1, 'Buzzbean', 'dvasyukhnov0@devhub.com', '+352 596 515 9541'),
