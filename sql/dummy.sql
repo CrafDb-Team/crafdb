@@ -1,15 +1,23 @@
 -- liquibase formatted sql
 
 -- changeset ljordaan:table-orderitemstate-insertion
-INSERT INTO "OrderItemState" ("OrderItemStateID", "OrderState")
+INSERT INTO 'OrderItemState' ('OrderState')
 VALUES 
-    (1, 'Ordered'), 
-    (2, 'Shipped'), 
-    (3, 'Delivered'), 
-    (4, 'Returned with Defect'), 
-    (5, 'Returned without Defect'), 
-    (6, 'Canceled');
--- rollback DELETE FROM TABLE "OrderItemState"; 
+    ('Ordered'), 
+    ('Shipped'), 
+    ('Delivered'), 
+    ('Returned with Defect'), 
+    ('Returned without Defect'), 
+    ('Canceled');
+-- rollback DELETE FROM TABLE "OrderItemState";
+
+-- changeset ljordaan:table-beertype-insertion
+INSERT INTO 'BeerType' ('BeerType') 
+VALUES 
+    ('Lager'),
+    ('Pale Ale'),
+    ('Pilsner');
+-- rollback DELETE FROM TABLE "BeerType";
 
 -- changeset lbradford:table-customer-insertion
 INSERT INTO 'Customer' ('CustomerID', 'Name', 'Email', 'ContactNumber') VALUES 
@@ -54,3 +62,18 @@ INSERT INTO 'Keg' ('BatchID', 'ExpiryDate') VALUES
 (7, '2023-08-25'),
 (8, '2023-11-19');
 -- rollback DELETE FROM TABLE "Keg";
+
+-- changeset lbradford:table-orderitem-insertion
+INSERT INTO 'OrderItem' ('OrderID', 'KegID', 'OrderItemStateID', 'PriceAtSale')
+VALUES 
+(1, 1, 1, 328.6),
+(2, 2, 2, 362.65),
+(2, 3, 2, 362.65),
+(3, 4, 1, 433.42),
+(4, 5, 2, 962.72),
+(5, 6, 4, 796.57),
+(6, 7, 6, 444.65),
+(7, 8, 6, 853.99),
+(8, 9, 2, 811.18),
+(9, 10, 2, 212.9);
+-- rollback DELETE FROM TABLE "OrderItem";
