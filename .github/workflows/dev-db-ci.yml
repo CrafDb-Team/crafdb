@@ -33,6 +33,17 @@ jobs:
     runs-on: ubuntu-latest
     environment: Testing
 
+    services:
+      postgres:
+        image: postgres:16.1
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pass123
+          POSTGRES_DB: empty_temp
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -62,7 +73,6 @@ jobs:
 
       - name: Create Test Database
         run: |
-          docker run -d --name postgresCont -p 5432:5432 -e POSTGRES_PASSWORD=pass123 postgres
           export PGPASSWORD="pass123"
           psql "postgresql://postgres@localhost:5432/postgres" -c "CREATE DATABASE empty_temp"
 
@@ -82,6 +92,17 @@ jobs:
     needs: database_setup_workflow
     runs-on: ubuntu-latest
     environment: Testing
+
+    services:
+      postgres:
+        image: postgres:16.1
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pass123
+          POSTGRES_DB: dev_temp
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout Repo
@@ -117,7 +138,6 @@ jobs:
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
           pg_dump "postgresql://$DB_USERNAME@$DB_URL/dev" > dump.sql
-          docker run -d --name postgresCont -p 5432:5432 -e POSTGRES_PASSWORD=pass123 postgres
           export PGPASSWORD="pass123"
           psql "postgresql://postgres@localhost:5432/postgres" -c "CREATE DATABASE dev_temp"
           psql "postgresql://postgres@localhost:5432/dev_temp" -f dump.sql
