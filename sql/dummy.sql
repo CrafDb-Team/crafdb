@@ -9,7 +9,22 @@ VALUES
     (4, 'Returned with Defect'), 
     (5, 'Returned without Defect'), 
     (6, 'Canceled');
--- rollback DELETE FROM TABLE "OrderItemState"; 
+-- rollback DELETE FROM TABLE "OrderItemState";
+
+-- changeset ljordaan:table-beertype-insertion
+INSERT INTO "BeerType" ("BeerTypeID", "BeerType") 
+VALUES 
+    (1, 'Stout'),
+    (2, 'Lager'),
+    (3, 'Pale Ale'),
+    (4, 'Wheat Beer'),
+    (5, 'Pilsner'),
+    (6, 'Sour Beer'),
+    (7, 'Amber Ale'),
+    (8, 'Porter'),
+    (9, 'Hefeweizen'),
+    (10, 'Malt');
+-- rollback DELETE FROM TABLE "BeerType";
 
 -- changeset lbradford:table-customer-insertion
 INSERT INTO 'Customer' ('CustomerID', 'Name', 'Email', 'ContactNumber') VALUES 
