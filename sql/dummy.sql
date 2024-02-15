@@ -11,6 +11,17 @@ VALUES
     ('Canceled');
 -- rollback DELETE FROM TABLE "OrderItemState";
 
+-- changeset ljordaan:table-batchstatus-insertion
+INSERT INTO 'BatchStatus' ('BatchStatus') 
+VALUES 
+('Mixing'),
+('Boiling'),
+('Cooling'),
+('Fermenting'),
+('Ready'),
+('Kegged');
+-- rollback DELETE FROM TABLE "BatchStatus";
+
 -- changeset ljordaan:table-beertype-insertion
 INSERT INTO 'BeerType' ('BeerType') 
 VALUES 
