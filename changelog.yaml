@@ -17,3 +17,5 @@ databaseChangeLog:
       file: sql/views.sql
    - include:
       file: sql/procedures.sql
+   - include:
+      file: sql/dummy.sql
