@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
---changeset emokoena:create-order-items-for-customer-order
-CREATE PROCEDURE CreateOderItemsForCustomerOrder(
+--changeset emokoena:proc-create-order-items-for-customer-order
+CREATE OR REPLACE PROCEDURE ProcCreateOderItemsForCustomerOrder(
    beer_id integer,  
    order_id integer,
    inout quantity integer
@@ -25,6 +25,7 @@ BEGIN
         FROM OrderItem oi 
         WHERE oi.KegID = kg.KegID
         AND oi.OrderItemStateID IN (0, 1, 2, 3)
+        AND kg.ExpiryDate > CURRENT_DATE
     )
     AND kg.BeerID = beer_id
     LIMIT quantity;
@@ -34,4 +35,4 @@ BEGIN
 END;
 ';
 
--- rollback DROP PROCEDURE IF EXISTS CreateOderItemsForCustomerOrder(INTEGER,INTEGER,INTEGER);
+-- rollback DROP PROCEDURE IF EXISTS ProcCreateOderItemsForCustomerOrder(INTEGER,INTEGER,INTEGER);
