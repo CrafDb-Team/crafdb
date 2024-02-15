@@ -8,7 +8,7 @@ CREATE PROCEDURE CreateOderItemsForCustomerOrder(
 )
 LANGUAGE plpgsql    
 AS 
-$$
+BEGIN
     INSERT INTO OrderItem(OrderID, KegID, OrderItemStateID, PriceAtSale)
     SELECT 
         order_id,
@@ -30,5 +30,5 @@ $$
 
     GET DIAGNOSTICS quantity := ROW_COUNT;
     COMMIT;
-$$;
+END;
 -- rollback DROP PROCEDURE IF EXISTS CreateOderItemsForCustomerOrder(INTEGER,INTEGER,INTEGER);
