@@ -28,7 +28,7 @@ FROM "Keg" JOIN "viewBatchInfo" ON "Keg"."BatchID" = "viewBatchInfo"."BatchID";
 
 -- changeset rtrickett:order-summaries-view runOnChange:true
 CREATE OR REPLACE VIEW "viewOrderSummaries" AS
-SELECT "viewOrderItemInfo"."OrderID", "Name", COUNT(*) AS "Quantity"
+SELECT "viewOrderItemInfo"."OrderID", "CustomerName", COUNT(*) AS "Quantity"
 FROM "viewOrderItemInfo" 
     JOIN "viewKegInfo" ON "viewOrderItemInfo"."KegID" = "viewKegInfo"."KegID"
     JOIN (
