@@ -10,19 +10,19 @@ LANGUAGE plpgsql
 AS 
 '
 BEGIN
-
     IF quantity < 0 THEN
         RAISE EXCEPTION ''Quantity % is invalid, value cannot be negative'', quantity;
     END IF;
 
-    INSERT INTO OrderItem("OrderID", "KegID", "OrderItemStateID", "PriceAtSale")
+    INSERT INTO "OrderItem"("OrderID", "KegID", "OrderItemStateID", "PriceAtSale")
     SELECT 
         order_id,
         kg."KegID",
-        0,
+        1,
         br."PricePerKeg"
     FROM "Keg" kg
-    INNER JOIN "Beer" br on br."BeerID" = kg."BeerID"
+    INNER JOIN "Batch" bt on bt."BatchID" = kg."BatchID"
+	INNER JOIN "Beer" br on br."BeerID" = bt."BeerID"
     WHERE NOT EXISTS (
         SELECT 
             oi."KegID", 
@@ -31,7 +31,7 @@ BEGIN
         WHERE oi."KegID" = kg."KegID"
         AND oi."OrderItemStateID" IN (1, 2, 3, 4)
     )
-    AND kg."BeerID" = "beer_id"
+    AND br."BeerID" = beer_id
     AND kg."ExpiryDate" > CURRENT_DATE
     LIMIT quantity;
 
