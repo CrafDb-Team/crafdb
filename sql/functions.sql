@@ -39,11 +39,11 @@ BEGIN
     FROM "Beer" br
     WHERE br."BeerName" = beer_name;
 
-    RETURN beer_id;
-
 EXCEPTION
     WHEN no_data_found THEN
-        RAISE EXCEPTION \'No beer with name % found\', beer_name
+        RAISE EXCEPTION ''No beer with name % found'', beer_name;
+
+RETURN beer_id;
 
 END;
 ';
