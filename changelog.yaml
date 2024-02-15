@@ -1,6 +1,6 @@
 databaseChangeLog:
    - include:
-       file: sql/order-items.sql
+      file: sql/order-items.sql
    - include:
       file: sql/batch.sql
    - include:
@@ -13,3 +13,5 @@ databaseChangeLog:
       file: sql/order.sql      
    - include:
       file: sql/references.sql
+   - include:
+      file: sql/procedures.sql
