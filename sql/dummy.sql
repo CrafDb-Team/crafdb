@@ -1,5 +1,5 @@
 -- changeset lbradford:table-customer-insertion
-INSERT INTO Customer (CustomerID, Name, Email, ContactNumber) VALUES 
+INSERT INTO 'Customer' ('CustomerID', 'Name', 'Email', 'ContactNumber') VALUES 
 (1, 'Buzzbean', 'dvasyukhnov0@devhub.com', '+352 596 515 9541'),
 (2, 'Feednation', 'stiley1@squarespace.com', '+58 869 343 1241'),
 (3, 'Thoughtstorm', 'mskudder2@shutterfly.com', '+1 940 597 9707'),
