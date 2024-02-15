@@ -33,6 +33,17 @@ jobs:
     runs-on: ubuntu-latest
     environment: Testing
 
+    services:
+      postgres:
+        image: postgres:16.1
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pass123
+          POSTGRES_DB: empty_temp
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -60,35 +71,33 @@ jobs:
       - name: Retrieve Env File
         run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
 
-      - name: Create Test Database
-        run: |
-          export $(cat .env | xargs)
-          export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS empty_temp"
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE empty_temp"
-
       - name: Create Liquibase Properties
         run: |
           export $(cat .env | xargs)
           echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
-          echo "url: jdbc:postgresql://${DB_URL}/empty_temp" >> liquibase.properties
-          echo "username:" $DB_USERNAME >> liquibase.properties
-          echo "password:" $DB_PASSWORD >> liquibase.properties
+          echo "url: jdbc:postgresql://localhost/empty_temp" >> liquibase.properties
+          echo "username: postgres" >> liquibase.properties
+          echo "password: pass123" >> liquibase.properties
 
       - name: Test Migration and Rollback
         run: ./liquibase/liquibase update-testing-rollback --rollback-on-error=true
-
-      - name: Drop Test Database
-        run: |
-          export $(cat .env | xargs)
-          export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE empty_temp"
 
   test_prod_db:
     name: Test Dev Replica DB Migration
     needs: database_setup_workflow
     runs-on: ubuntu-latest
     environment: Testing
+
+    services:
+      postgres:
+        image: postgres:16.1
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: pass123
+          POSTGRES_DB: dev_temp
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout Repo
@@ -123,24 +132,17 @@ jobs:
         run: |
           export $(cat .env | xargs)
           export PGPASSWORD=$DB_PASSWORD
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE IF EXISTS dev_temp"
-          psql "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "CREATE DATABASE dev_temp"
           pg_dump "postgresql://$DB_USERNAME@$DB_URL/dev" > dump.sql
-          psql "postgresql://$DB_USERNAME@$DB_URL/dev_temp" -f dump.sql
+          export PGPASSWORD="pass123"
+          psql "postgresql://postgres@localhost:5432/dev_temp" -f dump.sql
           
       - name: Create Liquibase Properties
         run: |
           export $(cat .env | xargs)
           echo "changelog-file:" $CHANGELOG_FILE >> liquibase.properties
-          echo "url: jdbc:postgresql://${DB_URL}/dev_temp" >> liquibase.properties
-          echo "username:" $DB_USERNAME >> liquibase.properties
-          echo "password:" $DB_PASSWORD >> liquibase.properties
+          echo "url: jdbc:postgresql://localhost:5432/dev_temp" >> liquibase.properties
+          echo "username: postgres" >> liquibase.properties
+          echo "password: pass123" >> liquibase.properties
 
       - name: Test Migration and Rollback
         run: ./liquibase/liquibase update-testing-rollback --rollback-on-error=true
-
-      - name: Drop Test Database
-        run: |
-          export $(cat .env | xargs)
-          export PGPASSWORD=$DB_PASSWORD
-          psql -d "postgresql://$DB_USERNAME@$DB_URL/postgres" -c "DROP DATABASE dev_temp"
