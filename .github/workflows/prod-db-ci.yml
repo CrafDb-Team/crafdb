@@ -71,11 +71,6 @@ jobs:
       - name: Retrieve Env File
         run: aws s3 cp ${{ secrets.BUCKET_OBJ_URL }} .env
 
-      - name: Create Test Database
-        run: |
-          export PGPASSWORD="pass123"
-          psql "postgresql://postgres@localhost:5432/postgres" -c "CREATE DATABASE empty_temp"
-
       - name: Create Liquibase Properties
         run: |
           export $(cat .env | xargs)
@@ -139,7 +134,6 @@ jobs:
           export PGPASSWORD=$DB_PASSWORD
           pg_dump "postgresql://$DB_USERNAME@$DB_URL/craft_beer_db" > dump.sql
           export PGPASSWORD="pass123"
-          psql "postgresql://postgres@localhost:5432/postgres" -c "CREATE DATABASE prod_temp"
           psql "postgresql://postgres@localhost:5432/prod_temp" -f dump.sql
           
       - name: Create Liquibase Properties

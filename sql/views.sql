@@ -8,10 +8,10 @@ FROM "Beer" JOIN "BeerType" ON "Beer"."BeerTypeID" = "BeerType"."BeerTypeID";
 
 -- changeset rtrickett:batch-info-view runOnChange:true
 CREATE OR REPLACE VIEW "viewBatchInfo" AS
-SELECT "BatchID", "BeerName", "BatchStatus"
+SELECT "BatchID", "BeerName", "BeerType", "BatchStatus"
 FROM "Batch" 
     JOIN "BatchStatus" ON "Batch"."BatchStatusID" = "BatchStatus"."BatchStatusID"
-    JOIN "Beer" ON "Batch"."BeerID" = "Beer"."BeerID";
+    JOIN "viewBeerInfo" ON "Batch"."BeerID" = "viewBeerInfo"."BeerID";
 -- rollback DROP VIEW "viewBatchInfo"
 
 -- changeset rtrickett:order-item-info-view runOnChange:true
@@ -28,19 +28,20 @@ FROM "Keg" JOIN "viewBatchInfo" ON "Keg"."BatchID" = "viewBatchInfo"."BatchID";
 
 -- changeset rtrickett:order-summaries-view runOnChange:true
 CREATE OR REPLACE VIEW "viewOrderSummaries" AS
-SELECT "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "OrderState", COUNT(*) AS "Quantity"
+SELECT "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "BeerType", "OrderState", COUNT(*) AS "Quantity"
 FROM "viewOrderItemInfo" 
     JOIN "viewKegInfo" ON "viewOrderItemInfo"."KegID" = "viewKegInfo"."KegID"
     JOIN (
         SELECT "Order"."OrderID", "Name" AS "CustomerName"
         FROM "Order" JOIN "Customer" ON "Order"."CustomerID" = "Customer"."CustomerID"
     ) AS selectTable ON "viewOrderItemInfo"."OrderID" = selectTable."OrderID"
-GROUP BY "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "OrderState";
+GROUP BY "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "OrderState"
+ORDER BY "viewOrderItemInfo"."OrderID", "CustomerName", "BeerName", "OrderState";
 -- rollback DROP VIEW "viewOrderSummaries"
 
 -- changeset rtrickett:stock-on-hand-view runOnChange:true
 CREATE OR REPLACE VIEW "viewStockOnHand" AS
-SELECT "BeerName", "ExpiryDate", COUNT(*) AS "Quantity"
+SELECT "BeerName", "BeerType", "ExpiryDate", COUNT(*) AS "Quantity"
 FROM "viewKegInfo" LEFT JOIN "viewOrderItemInfo" ON "viewKegInfo"."KegID" = "viewOrderItemInfo"."KegID"
 WHERE "ExpiryDate" > CURRENT_DATE AND ("OrderState" = 'Returned with Defect' OR "viewOrderItemInfo"."KegID" IS NULL)
 GROUP BY "BeerName", "ExpiryDate";
