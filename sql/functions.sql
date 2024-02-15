@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset emokoena:func-create-count-unsold-kegs-of-beer
+--changeset emokoena:func-create-count-unsold-kegs-of-beer runOnChange:true
 CREATE OR REPLACE FUNCTION FuncCountUnsoldKegsOfBeer(beer_id integer)
 RETURNS integer
 LANGUAGE plpgsql
