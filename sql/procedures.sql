@@ -6,12 +6,13 @@ CREATE OR REPLACE PROCEDURE ProcCreateOderItemsForCustomerOrder(
    order_id integer,
    inout quantity integer
 )
+LANGUAGE plpgsql    
 AS 
-$$
+'
 BEGIN
     INSERT INTO OrderItem("OrderID", "KegID", "OrderItemStateID", "PriceAtSale")
     SELECT 
-        "order_id",
+        order_id,
         kg."KegID",
         0,
         br."PricePerKeg"
@@ -27,11 +28,11 @@ BEGIN
     )
     AND kg."BeerID" = "beer_id"
     AND kg."ExpiryDate" > CURRENT_DATE
-    LIMIT "quantity";
+    LIMIT quantity;
 
-    GET DIAGNOSTICS "quantity" := ROW_COUNT;
+    GET DIAGNOSTICS quantity := ROW_COUNT;
     COMMIT;
 END;
-$$ LANGUAGE plpgsql;   
+';
 
 -- rollback DROP PROCEDURE IF EXISTS ProcCreateOderItemsForCustomerOrder(INTEGER,INTEGER,INTEGER);
