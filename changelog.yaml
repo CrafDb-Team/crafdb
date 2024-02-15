@@ -13,3 +13,5 @@ databaseChangeLog:
       file: sql/order.sql      
    - include:
       file: sql/references.sql
+   - include:
+      file: sql/views.sql
