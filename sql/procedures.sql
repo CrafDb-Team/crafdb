@@ -1,6 +1,6 @@
 --liquibase formatted sql
 
---changeset emokoena:CreateOderItemsForCustomerOrder
+--changeset emokoena:create-order-items-for-customer-order
 CREATE PROCEDURE CreateOderItemsForCustomerOrder(
    beer_id integer,  
    order_id integer,
@@ -33,4 +33,5 @@ BEGIN
     COMMIT;
 END;
 $$;
+
 -- rollback DROP PROCEDURE IF EXISTS CreateOderItemsForCustomerOrder(INTEGER,INTEGER,INTEGER);
