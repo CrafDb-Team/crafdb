@@ -27,12 +27,10 @@ ADD CONSTRAINT "Beer_BeerTypeID_FK" FOREIGN KEY ("BeerTypeID") REFERENCES "BeerT
 
 --changeset batandwa:order-item-order-id-fk
 ALTER TABLE "OrderItem"
-ADD CONSTRAINT "OrderItem_OrderID_FK" FOREIGN KEY ("OrderID")
-  REFERENCES "Order" ("OrderID");
--- rollback ALTER TABLE OrderItem DROP CONSTRAINT OrderItem_OrderID_FK;
+ADD CONSTRAINT "OrderItem_OrderID_FK" FOREIGN KEY ("OrderID") REFERENCES "Order" ("OrderID");
+-- rollback ALTER TABLE "OrderItem" DROP CONSTRAINT "OrderItem_OrderID_FK";
 
 --changeset batandwa:order-customer-id-fk
 ALTER TABLE "Order"
-ADD CONSTRAINT "Order_CustomerID_FK" FOREIGN KEY ("CustomerID")
-  REFERENCES "Customer" ("CustomerID");
--- rollback ALTER TABLE OrderItem DROP CONSTRAINT Order_CustomerID_FK;
+ADD CONSTRAINT "Order_CustomerID_FK" FOREIGN KEY ("CustomerID") REFERENCES "Customer" ("CustomerID");
+-- rollback ALTER TABLE "Order" DROP CONSTRAINT "Order_CustomerID_FK";

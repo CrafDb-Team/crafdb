@@ -6,5 +6,4 @@ CREATE TABLE "Order" (
   "CustomerID" integer NOT NULL,
   "CreatedOn" timestamp NOT NULL
 );
-
--- rollback DROP TABLE Order;
+-- rollback DROP TABLE "Order";
