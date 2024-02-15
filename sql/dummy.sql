@@ -112,4 +112,4 @@ VALUES
 (7, 8, 6, 853.99),
 (8, 9, 2, 811.18),
 (9, 10, 2, 212.9);
--- rollback DELETE FROM TABLE "OrderItem"
+-- rollback DELETE FROM TABLE OrderItem
