@@ -1,11 +1,11 @@
 --liquibase formatted sql
 
---changeset emokoena:create-count-unsold-kegs-of-
+--changeset emokoena:create-count-unsold-kegs-of-beer
 CREATE FUNCTION CountUnsoldKegsOfBeer(beer_id integer)
 RETURNS integer
 LANGUAGE plpgsql
 AS
-$$
+'
 DECLARE
     remaining_kegs_of_beer integer;
 BEGIN
@@ -17,8 +17,8 @@ BEGIN
     LEFT JOIN OrderItem oi on kg.KegID = oi.KegID
     WHERE bt.BeerID = beer_id
     AND oi.OrderID IS NULL;
-    
+
     RETURN remaining_kegs_of_beer;
 END;
-$$;
+';
 -- rollback DROP FUNCTION IF EXISTS CountUnsoldKegsOfBeer(integer);
