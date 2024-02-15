@@ -30,6 +30,16 @@ VALUES
 ('Allan-Larger', 'Spicy and complex with a hint of cloves', 3, 779.59);
 -- rollback DELETE FROM TABLE "Beer";
 
+INSERT INTO "OrderItemState" ("OrderItemStateID", "OrderState")
+VALUES 
+    (1, 'Ordered'), 
+    (2, 'Shipped'), 
+    (3, 'Delivered'), 
+    (4, 'Returned with Defect'), 
+    (5, 'Returned without Defect'), 
+    (6, 'Canceled');
+-- rollback DELETE FROM TABLE "OrderItemState"; 
+
 -- changeset lbradford:table-customer-insertion
 INSERT INTO 'Customer' ('CustomerID', 'Name', 'Email', 'ContactNumber') VALUES 
 (1, 'Buzzbean', 'dvasyukhnov0@devhub.com', '+352 596 515 9541'),
@@ -42,5 +52,18 @@ INSERT INTO 'Customer' ('CustomerID', 'Name', 'Email', 'ContactNumber') VALUES
 (8, 'Voonte', 'vdyett7@omniture.com', '+351 659 477 5898'),
 (9, 'Livetube', 'tconnachan8@ucla.edu', '+356 937 829 9865'),
 (10, 'Kaymbo', 'geades9@naver.com', '+86 575 798 1979');
-
 -- rollback DELETE FROM TABLE "Customer";
+
+-- changeset lbradford:table-order-insertion
+INSERT INTO 'Order' ('OrderID', 'CustomerID', 'CreatedOn') VALUES 
+(1, 1, '2023-08-25'),
+(2, 1, '2023-08-16'),
+(3, 1, '2023-09-21'),
+(4, 3, '2023-07-05'),
+(5, 4, '2024-01-20'),
+(6, 5, '2023-02-20'),
+(7, 7, '2023-07-12'),
+(8, 8, '2023-11-10'),
+(9, 8, '2023-11-02'),
+(10, 10, '2023-04-29');
+-- rollback DELETE FROM TABLE "Order";
