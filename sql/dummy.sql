@@ -71,16 +71,6 @@ VALUES
 ('Allan-Larger', 'Spicy and complex with a hint of cloves', 3, 779.59);
 -- rollback DELETE FROM TABLE "Beer";
 
-
-
--- changeset ljordaan:table-beertype-insertion
-INSERT INTO 'BeerType' ('BeerType') 
-VALUES 
-    ('Lager'),
-    ('Pale Ale'),
-    ('Pilsner');
--- rollback DELETE FROM TABLE "BeerType";
-
 -- changeset lbradford:table-batch-insertion
 INSERT INTO 'Batch' ('BeerID', 'BatchStatusID') VALUES 
 (2, 5),
