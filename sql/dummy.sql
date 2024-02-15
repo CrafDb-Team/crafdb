@@ -39,3 +39,18 @@ INSERT INTO 'Order' ('OrderID', 'CustomerID', 'CreatedOn') VALUES
 (9, 8, '2023-11-02'),
 (10, 10, '2023-04-29');
 -- rollback DELETE FROM TABLE "Order";
+
+
+-- changeset lbradford:table-keg-insertion
+INSERT INTO 'Keg' ('BatchID', 'ExpiryDate') VALUES 
+(1, '2023-07-06');
+(2, '2024-01-13'),
+(2, '2024-01-18'),
+(3, '2023-03-29'),
+(3, '2023-04-29'),
+(4, '2023-09-08'),
+(5, '2023-03-22'),
+(6, '2023-03-31'),
+(7, '2023-08-25'),
+(8, '2023-11-19');
+-- rollback DELETE FROM TABLE "Keg";
