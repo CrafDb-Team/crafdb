@@ -47,3 +47,63 @@ BEGIN
 END;
 ';
 -- rollback DROP FUNCTION IF EXISTS "funcBeerNameToID"(varchar);
+
+--changeset batandwa:func-order-item-state-name-to-id runOnChange:true
+CREATE OR REPLACE FUNCTION "funcOrderItemStateNameToID" (statusName varchar)
+RETURNS INT
+LANGUAGE plpgsql
+AS '
+DECLARE statusID INT;
+BEGIN
+	SELECT "OrderItemStateID"
+	INTO statusID
+		FROM "OrderItemState"
+			WHERE "OrderState" = statusName;
+
+    RETURN statusID;
+END;
+';
+
+-- rollback DROP FUNCTION IF EXISTS "funcOrderItemStateNameToID"(varchar);
+
+--changeset batandwa:func-beer-type-id-to-name runOnChange:true
+CREATE OR REPLACE FUNCTION "funcBeerTypeIDToName" (typeId INT)
+RETURNS varchar
+LANGUAGE plpgsql
+AS '
+DECLARE outName varchar;
+BEGIN
+	SELECT "BeerType"
+	INTO outName
+		FROM "BeerType"
+			WHERE "BeerTypeID" = typeId;
+
+    RETURN outName;
+END;
+';
+
+-- rollback DROP FUNCTION IF EXISTS "funcBeerTypeNameToID"(varchar);
+
+--changeset batandwa:func-compute-sales runOnChange:true
+CREATE OR REPLACE FUNCTION "funcComputeSales" (startDate timestamp, endDate timestamp)
+RETURNS TABLE("beerName" varchar, "beerType" varchar, "beerID" INT, "soldQuantity" INT)
+LANGUAGE plpgsql
+AS '
+BEGIN
+	RETURN QUERY
+		SELECT "Beer"."BeerName", "funcBeerTypeIDToName"("Beer"."BeerTypeID") AS "BeerType", "Beer"."BeerID", COUNT(*) AS "SoldQuantity"
+			FROM "OrderItem"
+				INNER JOIN "Order" ON "OrderItem"."OrderID" = "Order"."OrderID"
+				INNER JOIN "Keg" ON "Keg"."KegID" = "OrderItem"."KegID"
+				INNER JOIN "Batch" ON "Batch"."BatchID" = "Keg"."BatchID"
+				RIGHT JOIN "Beer" ON "Beer"."BeerID" = "Batch"."BeerID"
+			WHERE "Order"."CreatedOn" >= startDate
+				AND "Order"."CreatedOn" < endDate
+				AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"("Canceled")
+				AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"("Returned with Defect")
+				AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"("Returned without Defect")
+		GROUP BY "Beer"."BeerID";
+END;
+';
+
+-- rollback DROP FUNCTION IF EXISTS "funcComputeSales"(timestamp, timestamp);
