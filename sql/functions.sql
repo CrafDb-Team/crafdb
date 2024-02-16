@@ -86,24 +86,21 @@ END;
 
 --changeset batandwa:func-compute-sales runOnChange:true
 CREATE OR REPLACE FUNCTION "funcComputeSales" (startDate timestamp, endDate timestamp)
-RETURNS TABLE("beerName" varchar, "beerType" varchar, "beerID" INT, "soldQuantity" INT)
-LANGUAGE plpgsql
+RETURNS TABLE("BeerName" varchar, "BeerType" varchar, "BeerID" INT, "SoldQuantity" INT)
+LANGUAGE SQL
 AS '
-BEGIN
-	RETURN QUERY
-		SELECT "Beer"."BeerName", "funcBeerTypeIDToName"("Beer"."BeerTypeID") AS "BeerType", "Beer"."BeerID", COUNT(*) AS "SoldQuantity"
-			FROM "OrderItem"
-				INNER JOIN "Order" ON "OrderItem"."OrderID" = "Order"."OrderID"
-				INNER JOIN "Keg" ON "Keg"."KegID" = "OrderItem"."KegID"
-				INNER JOIN "Batch" ON "Batch"."BatchID" = "Keg"."BatchID"
-				RIGHT JOIN "Beer" ON "Beer"."BeerID" = "Batch"."BeerID"
-			WHERE "Order"."CreatedOn" >= startDate
-				AND "Order"."CreatedOn" < endDate
-				AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"("Canceled")
-				AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"("Returned with Defect")
-				AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"("Returned without Defect")
-		GROUP BY "Beer"."BeerID";
-END;
+	SELECT "Beer"."BeerName", "funcBeerTypeIDToName"("Beer"."BeerTypeID") AS "BeerType", "Beer"."BeerID", COUNT(*) AS "SoldQuantity"
+	FROM "OrderItem"
+		INNER JOIN "Order" ON "OrderItem"."OrderID" = "Order"."OrderID"
+		INNER JOIN "Keg" ON "Keg"."KegID" = "OrderItem"."KegID"
+		INNER JOIN "Batch" ON "Batch"."BatchID" = "Keg"."BatchID"
+		RIGHT JOIN "Beer" ON "Beer"."BeerID" = "Batch"."BeerID"
+	WHERE "Order"."CreatedOn" >= startDate
+		AND "Order"."CreatedOn" < endDate
+		AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"(''Canceled'')
+		AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"(''Returned with Defect'')
+		AND "OrderItem"."OrderItemStateID" != "funcOrderItemStateNameToID"(''Returned without Defect'')
+	GROUP BY "Beer"."BeerID";
 ';
 
 -- rollback DROP FUNCTION IF EXISTS "funcComputeSales"(timestamp, timestamp);
