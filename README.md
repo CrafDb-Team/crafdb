@@ -6,7 +6,7 @@
 <br>
   
 [![Commits](https://img.shields.io/github/commit-activity/w/CrafDb-Team/crafdb)](https://github.com/COS301-SE-2023/FridgeToPlate/activity)
-[![CI/CD](https://github.com/CrafDb-Team/crafdb/actions/workflows/dev-db-ci-cd.yml/badge.svg)](https://github.com/CrafDb-Team/crafdb/actions/workflows/dev-db-ci-cd.yml)
+[![CI/CD](https://github.com/CrafDb-Team/crafdb/actions/workflows/prod-db-ci-cd.yml/badge.svg)](https://github.com/CrafDb-Team/crafdb/actions/workflows/prod-db-ci-cd.yml)
 
 </div>
 
